@@ -29,7 +29,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private ChaseState chaseState;
     [SerializeField] private AttackState attackState;
     [SerializeField] private GameObject Player;
-    [SerializeField] private Vector3 Offset = new Vector3(2,2,0);
+    [SerializeField] private Vector3 Offset = new Vector3(2,0,0);
     NavMeshAgent agent;
 
     private void Start()
