@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -25.46
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1102,9 +1102,17 @@ PrefabInstance:
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: _range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
       propertyPath: myTarget
       value: 
       objectReference: {fileID: 809130996}
+    - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: _tetherRange
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
       propertyPath: currentTarget
       value: 

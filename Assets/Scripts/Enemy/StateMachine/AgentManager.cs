@@ -12,23 +12,23 @@ namespace StateManager
         [SerializeField] private GameObject currentTarget;
         public NavMeshAgent NavAgent;
 
-        private int _range;
-        private int _tetherRange;
+        [SerializeField] private int _range;
+        [SerializeField] private int _tetherRange;
 
-        private Vector3 _startPosition;
+        [SerializeField] private Vector3 _startPosition;
         [SerializeField] private StateManager Manager;
 
         void Start()
         {
             NavAgent = GetComponent<NavMeshAgent>();
-            InvokeRepeating("DistanceCheck", 0, 0.5f);
+            InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
             _startPosition = this.transform.position;
         }
 
         public void Update()
         {
             TargetNullCheck(Manager);
-            TellCurrentState(Manager);
+            //TellCurrentState(Manager);
         }
 
         public void TargetNullCheck(StateManager stateManager)
@@ -38,7 +38,14 @@ namespace StateManager
                 if (stateManager.CurrentState is ChaseState)
                 {
                     Debug.Log($"Current State is {stateManager.CurrentState}");
+                    if (currentTarget != null)
+                    {
                     NavAgent.destination = currentTarget.transform.position;
+                    }
+                    else if (NavAgent.destination != _startPosition)
+                    {
+                        NavAgent.destination = _startPosition;
+                    }
                 }
                 if (stateManager.CurrentState is IdleState)
                 {
@@ -71,10 +78,12 @@ namespace StateManager
             if(dist < _range) 
             {
                 currentTarget = myTarget;
+                Manager.IsInChaseRange = true;
             }
-            else if(dist < _tetherRange)
+            else if(dist > _tetherRange)
             {
                 currentTarget = null;
+                Manager.IsInChaseRange = false;
             }
         }
     }
