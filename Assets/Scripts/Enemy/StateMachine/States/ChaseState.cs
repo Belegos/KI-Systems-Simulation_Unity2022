@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace StateManager
 {
-
+    [System.Serializable]
     public class ChaseState : State
     {
         public AttackState AttackStateObj;

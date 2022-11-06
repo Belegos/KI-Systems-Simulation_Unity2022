@@ -8,20 +8,19 @@ namespace StateManager
 {
     public class AgentManager : MonoBehaviour
     {
-        private GameObject myTarget;
-        private GameObject currentTarget;
+        [SerializeField] private GameObject myTarget;
+        [SerializeField] private GameObject currentTarget;
         public NavMeshAgent NavAgent;
 
         private int _range;
         private int _tetherRange;
 
         private Vector3 _startPosition;
-        private StateManager Manager;
+        [SerializeField] private StateManager Manager;
 
         void Start()
         {
             NavAgent = GetComponent<NavMeshAgent>();
-            Manager = GetComponent<StateManager>();
             InvokeRepeating("DistanceCheck", 0, 0.5f);
             _startPosition = this.transform.position;
         }
@@ -34,36 +33,36 @@ namespace StateManager
 
         public void TargetNullCheck(StateManager stateManager)
         {
-            if (stateManager.currentState != null)
+            if (stateManager.CurrentState != null)
             {
-                if (stateManager.currentState is ChaseState)
+                if (stateManager.CurrentState is ChaseState)
                 {
-                    Debug.Log($"Current State is {stateManager.currentState}");
+                    Debug.Log($"Current State is {stateManager.CurrentState}");
                     NavAgent.destination = currentTarget.transform.position;
                 }
-                if (stateManager.currentState is IdleState)
+                if (stateManager.CurrentState is IdleState)
                 {
-                    Debug.Log($"Current State is {stateManager.currentState}");
+                    Debug.Log($"Current State is {stateManager.CurrentState}");
                     if(NavAgent.destination != _startPosition)
                     {
                         NavAgent.destination = _startPosition;
                     }
                 }
-                if (stateManager.currentState is AttackState)
+                if (stateManager.CurrentState is AttackState)
                 {
-                    Debug.Log($"Current State is {stateManager.currentState}");
+                    Debug.Log($"Current State is {stateManager.CurrentState}");
                 }
             }
             else
             {
-                Debug.Log($"ERROR! {stateManager.currentState} is null. ERROR! File:AGENTMANAGER.CS");
+                Debug.Log($"ERROR! {stateManager.CurrentState} is null. ERROR! File:AGENTMANAGER.CS");
                 return;
             }
         }
 
         public void TellCurrentState(StateManager Manager)
         {
-            Debug.Log($"Current State is: {Manager.currentState}");
+            Debug.Log($"Current State is: {Manager.CurrentState}");
         }
 
         public void DistanceCheck()

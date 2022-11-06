@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace StateManager
 {
+    [System.Serializable]
     public class AttackState : State
     {
         public override State ExecuteCurrentState(StateManager Manager)

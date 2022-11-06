@@ -8,19 +8,10 @@ namespace StateManager
 {
     public class StateManager : MonoBehaviour
     {
+        #region props
         public IdleState IdleState { get => idleState; }
         public ChaseState ChaseState { get => chaseState; }
         public AttackState AttackState { get => attackState; }
-
-        public State currentState;
-        [SerializeField] private IdleState idleState;
-        [SerializeField] private ChaseState chaseState;
-        [SerializeField] private AttackState attackState;
-
-
-        [SerializeField] private bool _isInChaseRange;
-        [SerializeField] private bool _isInAttackRange;
-
         public bool IsInAttackRange
         {
             get { return _isInAttackRange; ; }
@@ -32,11 +23,33 @@ namespace StateManager
             get { return _isInChaseRange; }
             set { _isInChaseRange = value; }
         }
+        public State CurrentState
+        {
+            get
+            {
+                return currentState;
+            }
+            private set
+            {
+                currentState = value;
+            }
+        }
+        #endregion
 
+        [SerializeField] private State currentState;
+        [SerializeField] private IdleState idleState;
+        [SerializeField] private ChaseState chaseState;
+        [SerializeField] private AttackState attackState;
+
+        [SerializeField] private bool _isInChaseRange;
+        [SerializeField] private bool _isInAttackRange;
 
         private void Start()
         {
-            currentState = IdleState;
+            idleState = new IdleState();
+            chaseState = new ChaseState();
+            attackState = new AttackState();
+            currentState = idleState;
         }
 
         void Update()
@@ -60,7 +73,7 @@ namespace StateManager
             {
                 nextState = chaseState;
             }
-            if(currentState == chaseState && !IsInAttackRange && !IsInChaseRange)
+            if (currentState == chaseState && !IsInAttackRange && !IsInChaseRange)
             {
                 nextState = IdleState;
             }
