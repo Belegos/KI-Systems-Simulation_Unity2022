@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+
 namespace StateManager
 {
     public class StateManager : MonoBehaviour
     {
-
         public IdleState IdleState { get => idleState; }
         public ChaseState ChaseState { get => chaseState; }
         public AttackState AttackState { get => attackState; }
@@ -17,9 +17,6 @@ namespace StateManager
         [SerializeField] private ChaseState chaseState;
         [SerializeField] private AttackState attackState;
 
-        [SerializeField] private GameObject Player;
-        [SerializeField] private Vector3 Offset = new Vector3(2, 0, 0);
-        NavMeshAgent agent;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
@@ -40,7 +37,6 @@ namespace StateManager
         private void Start()
         {
             currentState = IdleState;
-            agent = GetComponent<NavMeshAgent>();
         }
 
         void Update()
@@ -52,28 +48,24 @@ namespace StateManager
         {
             State nextState = currentState?.ExecuteCurrentState(this); //null checks, if not null run current state. If it is null ignore it
 
-            if (currentState == null)
+            if (currentState is null)
             {
                 nextState = IdleState;
             }
-            if (!IsInChaseRange)
+            if (currentState == chaseState && IsInAttackRange && IsInChaseRange)
             {
-                currentState = IdleState;
-            }
-            if (nextState == chaseState && IsInAttackRange)
-            {
-                agent.destination = Player.transform.position + Offset/Time.deltaTime;
                 nextState = AttackState;
             }
-            if(nextState == chaseState && !IsInAttackRange)
+            if (currentState == chaseState && !IsInAttackRange && IsInChaseRange)
             {
-                agent.destination = Player.transform.position + Offset/Time.deltaTime;
+                nextState = chaseState;
+            }
+            if(currentState == chaseState && !IsInAttackRange && !IsInChaseRange)
+            {
+                nextState = IdleState;
+            }
 
-            }
-            else
-            {
-                SwitchToNextState(nextState);
-            }
+            SwitchToNextState(nextState);
         }
         private void SwitchToNextState(State nextState)
         {

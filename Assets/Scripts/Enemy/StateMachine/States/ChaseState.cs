@@ -7,13 +7,8 @@ namespace StateManager
 
     public class ChaseState : State
     {
-        [SerializeField] private StateManager StateManagerGameObject;
         public AttackState AttackStateObj;
         public IdleState IdleStateObj;
-
-
-
-
 
         public override State ExecuteCurrentState(StateManager Manager)
         {

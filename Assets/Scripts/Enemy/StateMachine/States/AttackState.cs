@@ -6,8 +6,6 @@ namespace StateManager
 {
     public class AttackState : State
     {
-        private StateManager StateManagerGameObject;
-
         public override State ExecuteCurrentState(StateManager Manager)
         {
             Debug.Log("Player has been attacked");
