@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : State
+namespace StateManager
 {
-    public ChaseState ChaseState;
-    public bool canSeeThePlayer;
-    public override State ExecuteCurrentState()
+    public class IdleState : State
     {
-        if (!canSeeThePlayer)
+        public override State ExecuteCurrentState(StateManager Manager)
         {
-            return this;
+            if (!Manager.IsInChaseRange)
+            {
+                return this;
+            }
+            else return Manager.ChaseState;
+
         }
-        else return ChaseState;
-        
     }
 }

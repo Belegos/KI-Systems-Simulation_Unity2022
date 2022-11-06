@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EldenRingClone
+namespace KI_Project
 {
     public class InputHandler : MonoBehaviour
     {

@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : State
+namespace StateManager
 {
-    public override State ExecuteCurrentState()
+    public class AttackState : State
     {
-        Debug.Log("Player have been attacked");
-        return this;
-    }
+        private StateManager StateManagerGameObject;
 
+        public override State ExecuteCurrentState(StateManager Manager)
+        {
+            Debug.Log("Player has been attacked");
+            //return this;
+
+            #region Debug
+            Manager.IsInChaseRange = false;
+            Manager.IsInAttackRange = false;
+            #endregion
+            return Manager.IdleState;
+        }
+
+    }
 }

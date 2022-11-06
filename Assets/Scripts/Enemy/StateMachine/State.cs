@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class State : MonoBehaviour
+namespace StateManager
 {
-    public abstract State ExecuteCurrentState(); //returns current state und runs it
+    public abstract class State : MonoBehaviour
+    {
+        public abstract State ExecuteCurrentState(StateManager manager); //returns current state und runs it
+    }
 }

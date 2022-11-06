@@ -3,65 +3,82 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-
-public class StateManager : MonoBehaviour
+namespace StateManager
 {
-    #region .NET4_Singleton
-    /// <summary>
-    /// Pass a delegate to the constructor that calls the Singleton constructor.
-    /// Allows to check wether or not the instance has been created with IsValueCreates property
-    /// </summary>
-    private StateManager()
+    public class StateManager : MonoBehaviour
     {
-    }
-    private static readonly Lazy<StateManager> lazy = new Lazy<StateManager>(() => new StateManager());
-    public static StateManager Instance
-    {
-        get
+
+        public IdleState IdleState { get => idleState; }
+        public ChaseState ChaseState { get => chaseState; }
+        public AttackState AttackState { get => attackState; }
+
+        public State currentState;
+        [SerializeField] private IdleState idleState;
+        [SerializeField] private ChaseState chaseState;
+        [SerializeField] private AttackState attackState;
+
+        [SerializeField] private GameObject Player;
+        [SerializeField] private Vector3 Offset = new Vector3(2, 0, 0);
+        NavMeshAgent agent;
+
+        [SerializeField] private bool _isInChaseRange;
+        [SerializeField] private bool _isInAttackRange;
+
+        public bool IsInAttackRange
         {
-            return lazy.Value;
+            get { return _isInAttackRange; ; }
+            set { _isInAttackRange = value; }
         }
-    }
-    #endregion
 
-    public State currentState;
-    [SerializeField] private IdleState idleState;
-    [SerializeField] private ChaseState chaseState;
-    [SerializeField] private AttackState attackState;
-    [SerializeField] private GameObject Player;
-    [SerializeField] private Vector3 Offset = new Vector3(2,0,0);
-    NavMeshAgent agent;
-
-    private void Start()
-    {
-        agent = GetComponent<NavMeshAgent>();
-    }
-
-    void Update()
-    {
-        RunStateMachine();
-    }
-    #region Methods
-    private void RunStateMachine()
-    {
-        State nextState = currentState?.ExecuteCurrentState(); //null checks, if not null run current state. If it is null ignore it
-
-        if (nextState == null)
+        public bool IsInChaseRange
         {
-            Debug.Log($"Current State: ''{currentState}'' is null");
-            return;
-        }if(currentState == chaseState)
-        {
-            agent.destination = Player.transform.position + Offset;
+            get { return _isInChaseRange; }
+            set { _isInChaseRange = value; }
         }
-        else
+
+
+        private void Start()
         {
-            SwitchToNextState(nextState);
+            currentState = IdleState;
+            agent = GetComponent<NavMeshAgent>();
         }
+
+        void Update()
+        {
+            RunStateMachine();
+        }
+        #region Methods
+        private void RunStateMachine()
+        {
+            State nextState = currentState?.ExecuteCurrentState(this); //null checks, if not null run current state. If it is null ignore it
+
+            if (currentState == null)
+            {
+                nextState = IdleState;
+            }
+            if (!IsInChaseRange)
+            {
+                currentState = IdleState;
+            }
+            if (nextState == chaseState && IsInAttackRange)
+            {
+                agent.destination = Player.transform.position + Offset/Time.deltaTime;
+                nextState = AttackState;
+            }
+            if(nextState == chaseState && !IsInAttackRange)
+            {
+                agent.destination = Player.transform.position + Offset/Time.deltaTime;
+
+            }
+            else
+            {
+                SwitchToNextState(nextState);
+            }
+        }
+        private void SwitchToNextState(State nextState)
+        {
+            currentState = nextState;
+        }
+        #endregion
     }
-    private void SwitchToNextState(State nextState)
-    {
-        currentState = nextState;
-    }
-    #endregion
 }

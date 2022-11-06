@@ -3,7 +3,7 @@ using Debug = System.Diagnostics.Debug;
 using Quaternion = System.Numerics;
 using Vector3 = UnityEngine.Vector3;
 
-namespace EldenRingClone
+namespace KI_Project
 {
     public class PlayerLocomotion : MonoBehaviour
     {

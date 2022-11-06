@@ -2,48 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseState : State
+namespace StateManager
 {
-    public AttackState AttackState;
-    public IdleState idleState;
-    [SerializeField] private bool _isInAttackRange;
-    [SerializeField] private bool _isInChaseRange;
 
-    public bool IsInChaseRange
+    public class ChaseState : State
     {
-        get { return _isInChaseRange; }
-        set { _isInChaseRange = value; }
-    }
+        [SerializeField] private StateManager StateManagerGameObject;
+        public AttackState AttackStateObj;
+        public IdleState IdleStateObj;
 
 
-    public bool IsInAttackRange
-    {
-        get { return _isInAttackRange; }
-        set { _isInAttackRange = value; }
-    }
 
-    public override State ExecuteCurrentState()
-    {
-        if (!_isInChaseRange)
+
+
+        public override State ExecuteCurrentState(StateManager Manager)
         {
-            return idleState;
-        }
-        if (_isInChaseRange && _isInAttackRange)
-        {
-            return AttackState;
-        }
-        if(!_isInAttackRange && !_isInChaseRange)
-        {
-            return idleState;
-        }
-        if (!_isInAttackRange && _isInChaseRange)
-        {
-            return this;
-        }
-        else //should never happen. Debug-Fallback
-        {
-            Debug.Log("Something went wrong in Statemanager. Returning to Idle");
-            return idleState;
+
+            if (Manager.IsInChaseRange && Manager.IsInAttackRange)//when player is in chase range and in attack range, switch to attack state
+            {
+                return Manager.AttackState;
+            }
+            if (!Manager.IsInChaseRange) //when player is not in sightrange, return to idle
+            {
+                return Manager.IdleState;
+            }
+            if (!Manager.IsInAttackRange && !Manager.IsInChaseRange) //when player is not in sight and in attack range, return to idle
+            {
+                return Manager.IdleState;
+            }
+            if (!Manager.IsInAttackRange && Manager.IsInChaseRange)
+            {
+                return this;
+            }
+            else //should never happen. Debug-Fallback
+            {
+                Debug.Log("Something went wrong in Statemanager. Returning to Idle");
+                return Manager.IdleState;
+            }
         }
     }
 }
+
