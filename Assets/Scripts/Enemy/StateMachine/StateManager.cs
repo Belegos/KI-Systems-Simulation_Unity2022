@@ -41,8 +41,8 @@ namespace StateManager
         private IdleState idleState;
         private ChaseState chaseState;
         private AttackState attackState;
-        public NavMeshAgent NavAgent;
         private Animator animator;
+        private NavMeshAgent NavAgent;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
@@ -56,14 +56,13 @@ namespace StateManager
         private float velocity;
         private int VelocityHash;
 
-        private void Awake()
-        {
-        }
         private void Start()
         {
             VelocityHash = Animator.StringToHash("Velocity");
+            
             _startPosition = this.transform.position;
             myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
+            
             idleState = new IdleState();
             chaseState = new ChaseState();
             attackState = new AttackState();
@@ -76,21 +75,25 @@ namespace StateManager
 
         void Update()
         {
-            if(NavAgent.velocity.x < 0)
+            MovementAnimation();
+            RunStateMachine();
+            TargetNullCheck();
+        }
+
+        #region Methods
+        private void MovementAnimation() //sets NavAgent.velocity and updates float for blendtree
+        {
+            if (NavAgent.velocity.x < 0)
             {
-                velocity = NavAgent.velocity.x *-1;
+                velocity = NavAgent.velocity.x * -1;
             }
             else
             {
                 velocity = NavAgent.velocity.x;
             }
-            Debug.Log($"{NavAgent.velocity.normalized.x}");
-            RunStateMachine();
-            TargetNullCheck();
             animator.SetFloat(VelocityHash, velocity);
         }
-        #region Methods
-        private void RunStateMachine()
+        private void RunStateMachine() //checks for current state and switchs if nessesary
         {
             State nextState = currentState?.ExecuteCurrentState(this); //null checks, if not null run current state. If it is null ignore it
 
@@ -117,7 +120,7 @@ namespace StateManager
         {
             currentState = nextState;
         }
-        public void TargetNullCheck()
+        public void TargetNullCheck() //follows target, unless it is null, returns to start position
         {
             if (CurrentState != null)
             {
@@ -146,13 +149,8 @@ namespace StateManager
                     Debug.Log($"Current State is: {CurrentState}");
                 }
             }
-            else
-            {
-                Debug.Log($"ERROR! {CurrentState} is null. ERROR! File:AGENTMANAGER.CS");
-                return;
-            }
         }
-        public void DistanceCheck()
+        public void DistanceCheck() //checks if Target is in Range, if Target is out if range sets to null
         {
             float dist = Vector3.Distance(this.transform.position, myTarget.transform.position);
             if (dist < _range)
