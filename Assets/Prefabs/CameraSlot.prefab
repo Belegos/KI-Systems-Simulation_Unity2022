@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7663711013492826452
+--- !u!1 &3036403831776275021
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7663711013492826474}
-  - component: {fileID: 7663711013492826475}
+  - component: {fileID: 3036403831776275023}
+  - component: {fileID: 3036403831776275022}
   m_Layer: 0
   m_Name: CameraSlot
   m_TagString: Untagged
@@ -17,43 +17,46 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7663711013492826474
+--- !u!4 &3036403831776275023
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711013492826452}
+  m_GameObject: {fileID: 3036403831776275021}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7663711014068534822}
+  - {fileID: 3036403833174441494}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7663711013492826475
+--- !u!114 &3036403831776275022
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711013492826452}
+  m_GameObject: {fileID: 3036403831776275021}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60b27bf02c7f18d42a86e44cb770c266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
-  cameraTransform: {fileID: 7663711013738164351}
-  cameraPivotTransform: {fileID: 7663711014068534822}
+  cameraTransform: {fileID: 3036403832473346776}
+  cameraPivotTransform: {fileID: 3036403833174441494}
   lookSpeed: 0.1
   followSpeed: 0.1
   pivotSpeed: 0.03
   minimumPivotAngle: -35
   maximumPivotAngle: 35
---- !u!1 &7663711013738164346
+  cameraSphereRadius: 0.2
+  cameraCollisionOffSet: 0.2
+  minimumCollisionOffset: -0.2
+--- !u!1 &3036403832473346775
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -61,9 +64,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7663711013738164351}
-  - component: {fileID: 7663711013738164344}
-  - component: {fileID: 7663711013738164345}
+  - component: {fileID: 3036403832473346776}
+  - component: {fileID: 3036403832473346778}
+  - component: {fileID: 3036403832473346777}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -71,28 +74,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7663711013738164351
+--- !u!4 &3036403832473346776
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711013738164346}
+  m_GameObject: {fileID: 3036403832473346775}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: -3.229}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7663711014068534822}
+  m_Father: {fileID: 3036403833174441494}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &7663711013738164344
+--- !u!20 &3036403832473346778
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711013738164346}
+  m_GameObject: {fileID: 3036403832473346775}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -129,15 +132,15 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7663711013738164345
+--- !u!81 &3036403832473346777
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711013738164346}
+  m_GameObject: {fileID: 3036403832473346775}
   m_Enabled: 1
---- !u!1 &7663711014068534823
+--- !u!1 &3036403833174441493
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,7 +148,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7663711014068534822}
+  - component: {fileID: 3036403833174441494}
   m_Layer: 0
   m_Name: Camera Pivot
   m_TagString: Untagged
@@ -153,19 +156,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7663711014068534822
+--- !u!4 &3036403833174441494
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663711014068534823}
+  m_GameObject: {fileID: 3036403833174441493}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7663711013738164351}
-  m_Father: {fileID: 7663711013492826474}
+  - {fileID: 3036403832473346776}
+  m_Father: {fileID: 3036403831776275023}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
