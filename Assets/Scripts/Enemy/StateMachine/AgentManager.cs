@@ -57,7 +57,7 @@ namespace StateManager
                 }
                 if (stateManager.CurrentState is AttackState)
                 {
-                    Debug.Log($"Current State is {stateManager.CurrentState}");
+                    Debug.Log($"Current State is: {stateManager.CurrentState}");
                 }
             }
             else
