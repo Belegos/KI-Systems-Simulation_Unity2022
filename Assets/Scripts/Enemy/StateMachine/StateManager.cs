@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 namespace StateManager
 {
@@ -40,36 +41,43 @@ namespace StateManager
         private IdleState idleState;
         private ChaseState chaseState;
         private AttackState attackState;
+        public NavMeshAgent NavAgent;
+        private Animator animator;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
         [SerializeField] private GameObject myTarget;
         [SerializeField] private GameObject currentTarget;
         [SerializeField] private string _searchForTag = "Player";
-
-        public NavMeshAgent NavAgent;
-
         [SerializeField] private int _range = 3;
         [SerializeField] private int _tetherRange = 5;
-
         [SerializeField] private Vector3 _startPosition;
 
+        private void Awake()
+        {
+        }
         private void Start()
         {
+            _startPosition = this.transform.position;
+            myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
             idleState = new IdleState();
             chaseState = new ChaseState();
             attackState = new AttackState();
             currentState = idleState;
+
             NavAgent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
             InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
-            _startPosition = this.transform.position;
-            myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
         }
 
         void Update()
         {
             RunStateMachine();
             TargetNullCheck();
+            if(NavAgent.velocity.x > 0.1f | NavAgent.velocity.y > 0.1f)
+            {
+
+            }
         }
         #region Methods
         private void RunStateMachine()

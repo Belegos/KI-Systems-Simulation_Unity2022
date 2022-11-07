@@ -2299,7 +2299,6 @@ GameObject:
   - component: {fileID: 7775132901716060045}
   - component: {fileID: 6328347668644938725}
   - component: {fileID: 7775132901716060047}
-  - component: {fileID: 7775132901716060044}
   m_Layer: 10
   m_Name: Enemy
   m_TagString: Untagged
@@ -2365,8 +2364,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c002ab67f8fc554596d6b9776370ef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NavAgent: {fileID: 0}
   _isInChaseRange: 0
   _isInAttackRange: 0
+  myTarget: {fileID: 0}
+  currentTarget: {fileID: 0}
+  _searchForTag: Player
+  _range: 3
+  _tetherRange: 5
+  _startPosition: {x: 0, y: 0, z: 0}
 --- !u!195 &6328347668644938725
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2403,19 +2409,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 341212248822550626}
   canRotate: 1
---- !u!114 &7775132901716060044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6328347668644938722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75b9710d1dd7af9439f0a6668c444abb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myTarget: {fileID: 6328347668644938722}
-  currentTarget: {fileID: 6328347668644938722}
-  NavAgent: {fileID: 6328347668644938725}
-  Manager: {fileID: 7775132901716060045}
