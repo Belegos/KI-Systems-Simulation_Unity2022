@@ -36,13 +36,23 @@ namespace StateManager
         }
         #endregion
 
-        [SerializeField] private State currentState;
-        [SerializeField] private IdleState idleState;
-        [SerializeField] private ChaseState chaseState;
-        [SerializeField] private AttackState attackState;
+        private State currentState;
+        private IdleState idleState;
+        private ChaseState chaseState;
+        private AttackState attackState;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
+        [SerializeField] private GameObject myTarget;
+        [SerializeField] private GameObject currentTarget;
+        [SerializeField] private string _searchForTag = "Player";
+
+        public NavMeshAgent NavAgent;
+
+        [SerializeField] private int _range = 3;
+        [SerializeField] private int _tetherRange = 5;
+
+        [SerializeField] private Vector3 _startPosition;
 
         private void Start()
         {
@@ -50,11 +60,16 @@ namespace StateManager
             chaseState = new ChaseState();
             attackState = new AttackState();
             currentState = idleState;
+            NavAgent = GetComponent<NavMeshAgent>();
+            InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
+            _startPosition = this.transform.position;
+            myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
         }
 
         void Update()
         {
             RunStateMachine();
+            TargetNullCheck();
         }
         #region Methods
         private void RunStateMachine()
@@ -83,6 +98,55 @@ namespace StateManager
         private void SwitchToNextState(State nextState)
         {
             currentState = nextState;
+        }
+        public void TargetNullCheck()
+        {
+            if (CurrentState != null)
+            {
+                if (CurrentState is ChaseState)
+                {
+                    Debug.Log($"Current State is {CurrentState}");
+                    if (currentTarget != null)
+                    {
+                        NavAgent.destination = currentTarget.transform.position;
+                    }
+                    else if (NavAgent.destination != _startPosition)
+                    {
+                        NavAgent.destination = _startPosition;
+                    }
+                }
+                if (CurrentState is IdleState)
+                {
+                    Debug.Log($"Current State is {CurrentState}");
+                    if (NavAgent.destination != _startPosition)
+                    {
+                        NavAgent.destination = _startPosition;
+                    }
+                }
+                if (CurrentState is AttackState)
+                {
+                    Debug.Log($"Current State is: {CurrentState}");
+                }
+            }
+            else
+            {
+                Debug.Log($"ERROR! {CurrentState} is null. ERROR! File:AGENTMANAGER.CS");
+                return;
+            }
+        }
+        public void DistanceCheck()
+        {
+            float dist = Vector3.Distance(this.transform.position, myTarget.transform.position);
+            if (dist < _range)
+            {
+                currentTarget = myTarget;
+                IsInChaseRange = true;
+            }
+            else if (dist > _tetherRange)
+            {
+                currentTarget = null;
+                IsInChaseRange = false;
+            }
         }
         #endregion
     }

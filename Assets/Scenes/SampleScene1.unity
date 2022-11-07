@@ -221,6 +221,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130178615}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!195 &551275282 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 6328347668644938725, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+  m_PrefabInstance: {fileID: 341212250637514449}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &689654619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25.46
+      value: -4.44
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -278,6 +283,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862890, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6495258964865862890, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1110,6 +1119,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 809130996}
     - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7775132901716060044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
       propertyPath: _tetherRange
       value: 5
       objectReference: {fileID: 0}
@@ -1117,6 +1130,18 @@ PrefabInstance:
       propertyPath: currentTarget
       value: 
       objectReference: {fileID: 809130996}
+    - target: {fileID: 7775132901716060045, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: _range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7775132901716060045, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: NavAgent
+      value: 
+      objectReference: {fileID: 551275282}
+    - target: {fileID: 7775132901716060045, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: _tetherRange
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7775132901716060047, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
       propertyPath: anim
       value: 
