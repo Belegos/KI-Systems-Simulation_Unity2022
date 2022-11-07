@@ -6,6 +6,7 @@ namespace KI_Project
     public class CameraHandler : MonoBehaviour
     {
         public Transform targetTransform;
+        private GameObject targetTransformTarget;
         public Transform cameraTransform;
         public Transform cameraPivotTransform;
         private Transform _myTransform;
@@ -34,6 +35,8 @@ namespace KI_Project
         {
             Singleton = this;
             _myTransform = transform;
+            targetTransformTarget = GameObject.FindGameObjectWithTag("Player");
+            targetTransform = targetTransformTarget.transform;
             _defaultPosition = cameraTransform.localPosition.z;
             _ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10); // Camera ignore specific layers
         }
