@@ -52,7 +52,6 @@ namespace StateManager
         [SerializeField] private int _range = 3;
         [SerializeField] private int _tetherRange = 5;
         [SerializeField] private Vector3 _startPosition;
-        private GameObject _selfTarget;
         private float velocity;
         private int VelocityHash;
 

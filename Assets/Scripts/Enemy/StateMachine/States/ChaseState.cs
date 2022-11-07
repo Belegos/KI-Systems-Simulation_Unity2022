@@ -7,9 +7,6 @@ namespace StateManager
     [System.Serializable]
     public class ChaseState : State
     {
-        public AttackState AttackStateObj;
-        public IdleState IdleStateObj;
-
         public override State ExecuteCurrentState(StateManager Manager)
         {
 
