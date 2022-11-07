@@ -371,6 +371,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6260744881747360349, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
+      propertyPath: m_Name
+      value: PlayerMesh
+      objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1704,5 +1708,26 @@ PrefabInstance:
       propertyPath: myTarget
       value: 
       objectReference: {fileID: 185547416}
-    m_RemovedComponents: []
+    - target: {fileID: 5821735190029145046, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_BaseOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821735190029145046, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_Acceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821735190029145046, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821735190029145054, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_Height
+      value: 1.8196983
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821735190029145054, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_Center.y
+      value: 0.8600321
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5821735188239617044, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}

@@ -52,12 +52,16 @@ namespace StateManager
         [SerializeField] private int _range = 3;
         [SerializeField] private int _tetherRange = 5;
         [SerializeField] private Vector3 _startPosition;
+        private GameObject _selfTarget;
+        private float velocity;
+        private int VelocityHash;
 
         private void Awake()
         {
         }
         private void Start()
         {
+            VelocityHash = Animator.StringToHash("Velocity");
             _startPosition = this.transform.position;
             myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
             idleState = new IdleState();
@@ -66,18 +70,24 @@ namespace StateManager
             currentState = idleState;
 
             NavAgent = GetComponent<NavMeshAgent>();
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
         }
 
         void Update()
         {
+            if(NavAgent.velocity.x < 0)
+            {
+                velocity = NavAgent.velocity.x *-1;
+            }
+            else
+            {
+                velocity = NavAgent.velocity.x;
+            }
+            Debug.Log($"{NavAgent.velocity.normalized.x}");
             RunStateMachine();
             TargetNullCheck();
-            if(NavAgent.velocity.x > 0.1f | NavAgent.velocity.y > 0.1f)
-            {
-
-            }
+            animator.SetFloat(VelocityHash, velocity);
         }
         #region Methods
         private void RunStateMachine()
