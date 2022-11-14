@@ -1,10 +1,12 @@
+using System;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
 
 namespace StateManager
 {
-    public class StateManager : MonoBehaviour
+    public class StateManager : MonoBehaviour, SearchForTag
     {
         #region props
         public IdleState IdleState { get => idleState; }
@@ -32,6 +34,18 @@ namespace StateManager
                 currentState = value;
             }
         }
+        public Animator Animator
+        {
+            get { return animator; }
+            set { animator = value; }
+        }
+        public GameObject CurrentTaget { get => currentTarget; }
+
+        public GameObject CurrentEnemyEntity
+        {
+            get { return _currentEnemyEntity; }
+        }
+
         #endregion
 
         private State currentState;
@@ -40,25 +54,34 @@ namespace StateManager
         private AttackState attackState;
         private Animator animator;
         private NavMeshAgent NavAgent;
+        private LineRenderer LineRenderer;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
         [SerializeField] private GameObject myTarget;
         [SerializeField] private GameObject currentTarget;
+        [SerializeField] private GameObject _currentEnemyEntity;
+
+
+
         [SerializeField] private string _searchForTag = "Player";
         [SerializeField] private int _range = 3;
         [SerializeField] private int _tetherRange = 5;
+        [SerializeField] private int _attackRange = 1;
         [SerializeField] private Vector3 _startPosition;
         private float velocity;
         private int VelocityHash;
 
+        [SerializeField] private float radius = 2.0f;
+        [SerializeField] private float lineWidth = 1;
+
         private void Start()
         {
             VelocityHash = Animator.StringToHash("Velocity");
-            
+
             _startPosition = this.transform.position;
             myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
-            
+
             idleState = new IdleState();
             chaseState = new ChaseState();
             attackState = new AttackState();
@@ -66,7 +89,10 @@ namespace StateManager
 
             NavAgent = GetComponent<NavMeshAgent>();
             animator = GetComponentInChildren<Animator>();
+            LineRenderer = GetComponent<LineRenderer>();
             InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
+            InvokeRepeating("CheckDistanceBetweenEnemyAndPlayer", 0, 0.5f); //checks every 0.5 sec if the target is in _attackRange, if true sets bool IsInAttackRange, for attack state switch
+
         }
 
         void Update()
@@ -74,10 +100,42 @@ namespace StateManager
             MovementAnimation();
             RunStateMachine();
             TargetNullCheck();
+            DrawCircle2D();
         }
 
+        private void CheckDistanceBetweenEnemyAndPlayer()
+        {
+            if (Vector3.Distance(myTarget.transform.position, this.transform.position) < _attackRange)
+            {
+                IsInAttackRange = true;
+            }
+            else
+            {
+                IsInAttackRange = false;
+            }
+        }
+
+
         #region Methods
-        private void MovementAnimation() //sets NavAgent.velocity and updates float for blendtree
+        private void DrawCircle2D()
+        {
+            var segments = 360;
+            LineRenderer.useWorldSpace = false;
+            LineRenderer.startWidth = lineWidth;
+            LineRenderer.endWidth = lineWidth;
+            LineRenderer.positionCount = segments + 1;
+
+            var pointCount = segments + 1; //closes gap between start and end
+            var points = new Vector3[pointCount];
+
+            for (int i = 0; i < pointCount; i++)
+            {
+                var rad = Mathf.Deg2Rad * (i * 360f / segments);
+                points[i] = new Vector3(Mathf.Sin(rad) * radius, 0, Mathf.Cos(rad) * rad);
+            }
+            LineRenderer.SetPositions(points);
+        }
+        private void MovementAnimationOld() //sets NavAgent.velocity and updates float for blendtree
         {
             if (NavAgent.velocity.x < 0)
             {
@@ -159,6 +217,12 @@ namespace StateManager
                 currentTarget = null;
                 IsInChaseRange = false;
             }
+        }
+
+        private void MovementAnimation()
+        {
+            velocity = NavAgent.velocity.magnitude / NavAgent.speed;
+            animator.SetFloat(VelocityHash, velocity);
         }
         #endregion
     }

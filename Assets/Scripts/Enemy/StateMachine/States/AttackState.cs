@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,19 +6,24 @@ using UnityEngine;
 namespace StateManager
 {
     [System.Serializable]
-    public class AttackState : State
+    public class AttackState : State, IAttack
     {
-        public override State ExecuteCurrentState(StateManager Manager)
+        [SerializeField] private GameObject Enemy;
+        public void Attack(StateManager Manager)
         {
-            Debug.Log("Player has been attacked");
-            //return this;
-
-            #region Debug
-            Manager.IsInChaseRange = false;
-            Manager.IsInAttackRange = false;
-            #endregion
-            return Manager.IdleState;
+            //Manager.Animator.SetTrigger("Attack");
+            if (Vector3.Distance(Manager.CurrentEnemyEntity.transform.position,Manager.CurrentTaget.transform.position) <= 1)
+            {
+                Debug.Log("Animation Attack");
+                Manager.Animator.Play("Attack", 0);
+            }
+            Debug.Log("ATtACKED");
         }
 
+        public override State ExecuteCurrentState(StateManager Manager)
+        {
+            Attack(Manager);
+            return Manager.ChaseState;
+        }
     }
 }
