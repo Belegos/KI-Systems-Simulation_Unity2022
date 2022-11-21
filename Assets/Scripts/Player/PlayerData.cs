@@ -37,7 +37,7 @@ public class PlayerData : MonoBehaviour, INotifyPropertyChanged
     }
     private void Start()
     {
-        PropertyChanged(this, new PropertyChangedEventArgs("Health"));
+        //PropertyChanged(this, new PropertyChangedEventArgs("Health"));
         Health = _maxHealth;
     }
 }
