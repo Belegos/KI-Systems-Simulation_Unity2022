@@ -148,7 +148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d13df9da8b37b9147b4a3dd0a0c1694f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d13df9da8b37b9147b4a3dd0a0c1694f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -190,6 +190,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plane
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d13df9da8b37b9147b4a3dd0a0c1694f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d13df9da8b37b9147b4a3dd0a0c1694f, type: 3}
 --- !u!4 &122154436 stripped
@@ -209,7 +213,7 @@ GameObject:
   - component: {fileID: 130178619}
   - component: {fileID: 130178618}
   - component: {fileID: 130178617}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Quad (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,6 +498,24 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &548588475 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d13df9da8b37b9147b4a3dd0a0c1694f, type: 3}
+  m_PrefabInstance: {fileID: 122154435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &548588478
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548588475}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.02, y: 0.020000005, z: 0.020000005}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &551275286 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5821735190029145042, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
@@ -547,15 +569,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.23
+      value: 13.079
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.805
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.17
+      value: -6.078
       objectReference: {fileID: 0}
     - target: {fileID: 6495258964865862806, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -593,6 +615,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6495258964865862891, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
+      propertyPath: normalCamera
+      value: 
+      objectReference: {fileID: 3036403833657447793}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c7507fb9dbfa7a4b833779c4092fbbf, type: 3}
 --- !u!1 &624795946
@@ -1072,7 +1098,7 @@ GameObject:
   - component: {fileID: 822078807}
   - component: {fileID: 822078806}
   - component: {fileID: 822078805}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1169,7 +1195,7 @@ GameObject:
   - component: {fileID: 1081779668}
   - component: {fileID: 1081779667}
   - component: {fileID: 1081779666}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Quad (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1329,7 +1355,7 @@ GameObject:
   - component: {fileID: 1167051142}
   - component: {fileID: 1167051141}
   - component: {fileID: 1167051140}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Quad (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1427,6 +1453,10 @@ PrefabInstance:
       value: Floor
       objectReference: {fileID: 0}
     - target: {fileID: 8204273117823145167, guid: 4559d32f5f2d992458ea871f39a5e8b7, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8204273117823145167, guid: 4559d32f5f2d992458ea871f39a5e8b7, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -1512,7 +1542,7 @@ GameObject:
   - component: {fileID: 1484328526}
   - component: {fileID: 1484328525}
   - component: {fileID: 1484328524}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1577,7 +1607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1484328523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.42, z: 0}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1596,7 +1626,7 @@ GameObject:
   - component: {fileID: 1518335166}
   - component: {fileID: 1518335165}
   - component: {fileID: 1518335164}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1762,7 +1792,7 @@ GameObject:
   - component: {fileID: 1696121581}
   - component: {fileID: 1696121580}
   - component: {fileID: 1696121579}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2050,7 +2080,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1897921745}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2085,7 +2115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1925641794}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2118,7 +2148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1979531860}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
