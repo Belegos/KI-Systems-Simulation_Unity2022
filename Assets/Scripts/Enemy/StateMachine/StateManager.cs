@@ -50,7 +50,10 @@ namespace StateManager
             get { return _coolDownTimer; }
             set { _coolDownTimer = value; }
         }
-
+        public int AttackDamage {
+            get { return _attackDamage; }
+            set { _attackDamage = value; }
+        }
 
         #endregion
 
@@ -67,6 +70,8 @@ namespace StateManager
         [SerializeField] private GameObject myTarget;
         [SerializeField] private GameObject currentTarget;
         [SerializeField] private GameObject _currentEnemyEntity;
+        private event PropertyChangedEventHandler PropertyChanged;
+        
 
 
 
@@ -74,6 +79,7 @@ namespace StateManager
         [SerializeField] private int _range = 3;
         [SerializeField] private int _tetherRange = 5;
         [SerializeField] private int _attackRange = 1;
+        [SerializeField] private int _attackDamage = 1;
         [SerializeField] private Vector3 _startPosition;
         private float velocity;
         private int VelocityHash;
@@ -83,6 +89,9 @@ namespace StateManager
         private float _coolDownTimer;
 
 
+
+        //private void OnEnable() => PropertyChanged += PlayerData.
+        //private void OnDisable() => PropertyChanged -= 
 
 
         private void Start()

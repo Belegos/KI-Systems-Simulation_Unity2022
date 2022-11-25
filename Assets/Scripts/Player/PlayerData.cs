@@ -1,43 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using UnityEngine.UI;
 
-public class PlayerData : MonoBehaviour, INotifyPropertyChanged
+namespace StateManager
 {
-    [SerializeField][Range(0, 100)] private int _currentHealth;
-    [SerializeField][Range(0, 100)] private int _maxHealth;
-    [SerializeField] private Slider slider;
-    [SerializeField] private TextMeshPro textComp;
-    [SerializeField] private GameObject SliderGameObject;
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    public int Health
+    public class PlayerData : MonoBehaviour, INotifyPropertyChanged
     {
-        get { return _currentHealth; }
+        [SerializeField][Range(0, 100)] private int _currentHealth;
+        [SerializeField][Range(0, 100)] private int _maxHealth;
+        [SerializeField] private Slider slider;
+        [SerializeField] private TextMeshPro textComp;
+        [SerializeField] private GameObject SliderGameObject;
 
-        set
+        public event PropertyChangedEventHandler PropertyChanged;
+        public int Health
         {
-            _currentHealth = value;
+            get { return _currentHealth; }
+
+            set
+            {
+                _currentHealth = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Health"));
+            }
         }
-    }
 
+        public PropertyChangedEventHandler OnTakeDamage
+        {
+            get
+            {
+                return PropertyChanged;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    TakeDamage(1);
+                    PropertyChanged(this, new PropertyChangedEventArgs("Health"));
+                }
+            }
+        }
 
-    public void TakeDamage(int damage)
-    {
-        Health -= damage;
-        PropertyChanged(this, new PropertyChangedEventArgs("Health"));
-    }
-    private void Awake()
-    {
-        slider = GetComponent<Slider>();
-        textComp = GetComponentInParent<TextMeshPro>();
-    }
-    private void Start()
-    {
-        PropertyChanged(this, new PropertyChangedEventArgs("Health"));
-        Health = _maxHealth;
+        private void OnEnable()
+        {
+            PropertyChanged += OnTakeDamage;
+
+        }
+        private void OnDisable()
+        {
+            PropertyChanged -= OnTakeDamage;
+        }
+        private void Start()
+        {
+            
+            Health = _maxHealth;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            Health -= damage;
+            PropertyChanged(this, new PropertyChangedEventArgs("Health"));
+        }
+
     }
 }
+

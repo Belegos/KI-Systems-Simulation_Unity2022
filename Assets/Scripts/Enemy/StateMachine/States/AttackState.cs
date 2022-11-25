@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace StateManager
@@ -21,8 +19,14 @@ namespace StateManager
                     Manager.CoolDownTimer = 2f;
                     Debug.Log("Animation Attack");
                     Manager.Animator.Play("Attack", 0);
+                    DamagaDoMethod();
+
                 }
             }
+        }
+        public void DamagaDoMethod()
+        {
+            //PlayerData.
         }
 
         public override State ExecuteCurrentState(StateManager Manager)
