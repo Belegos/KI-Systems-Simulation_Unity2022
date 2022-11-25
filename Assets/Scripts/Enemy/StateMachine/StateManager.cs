@@ -45,6 +45,12 @@ namespace StateManager
         {
             get { return _currentEnemyEntity; }
         }
+        public float CoolDownTimer
+        {
+            get { return _coolDownTimer; }
+            set { _coolDownTimer = value; }
+        }
+
 
         #endregion
 
@@ -74,6 +80,10 @@ namespace StateManager
 
         [SerializeField] private float radius = 2.0f;
         [SerializeField] private float lineWidth = 1;
+        private float _coolDownTimer;
+
+
+
 
         private void Start()
         {
@@ -101,6 +111,15 @@ namespace StateManager
             RunStateMachine();
             TargetNullCheck();
             DrawCircle2D();
+
+            if (CoolDownTimer >= 0)
+            {
+                CoolDownTimer -= Time.deltaTime;
+            }
+            else
+            {
+                attackState.AttackIsReady = true;
+            }
         }
 
         private void CheckDistanceBetweenEnemyAndPlayer()

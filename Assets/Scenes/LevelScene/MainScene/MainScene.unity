@@ -2489,6 +2489,10 @@ PrefabInstance:
       propertyPath: m_AngularSpeed
       value: 160
       objectReference: {fileID: 0}
+    - target: {fileID: 5821735190029145046, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5821735190029145054, guid: 498cf05b1fa690d46a992f3d9b77cbe1, type: 3}
       propertyPath: m_Height
       value: 1.8196983

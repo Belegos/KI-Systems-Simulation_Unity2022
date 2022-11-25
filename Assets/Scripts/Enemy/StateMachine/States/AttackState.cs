@@ -9,15 +9,20 @@ namespace StateManager
     public class AttackState : State, IAttack
     {
         [SerializeField] private GameObject Enemy;
+        [SerializeField] public bool AttackIsReady = true;
         public void Attack(StateManager Manager)
         {
             //Manager.Animator.SetTrigger("Attack");
-            if (Vector3.Distance(Manager.CurrentEnemyEntity.transform.position,Manager.CurrentTaget.transform.position) <= 1)
+            if (Vector3.Distance(Manager.CurrentEnemyEntity.transform.position, Manager.CurrentTaget.transform.position) <= 1)
             {
-                Debug.Log("Animation Attack");
-                Manager.Animator.Play("Attack", 0);
+                if (AttackIsReady)
+                {
+                    AttackIsReady = false;
+                    Manager.CoolDownTimer = 2f;
+                    Debug.Log("Animation Attack");
+                    Manager.Animator.Play("Attack", 0);
+                }
             }
-            Debug.Log("ATtACKED");
         }
 
         public override State ExecuteCurrentState(StateManager Manager)
