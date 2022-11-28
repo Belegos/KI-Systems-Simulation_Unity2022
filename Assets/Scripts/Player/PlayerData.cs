@@ -23,7 +23,7 @@ namespace StateManager
             set
             {
                 _currentHealth = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Health"));
+               // PropertyChanged(this, new PropertyChangedEventArgs("Health"));
             }
         }
 
