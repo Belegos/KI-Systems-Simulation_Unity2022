@@ -10,7 +10,6 @@ namespace StateManager
         [SerializeField] public bool AttackIsReady = true;
         public void Attack(StateManager Manager)
         {
-            //Manager.Animator.SetTrigger("Attack");
             if (Vector3.Distance(Manager.CurrentEnemyEntity.transform.position, Manager.CurrentTaget.transform.position) <= 1)
             {
                 if (AttackIsReady)
@@ -20,13 +19,14 @@ namespace StateManager
                     Debug.Log("Animation Attack");
                     Manager.Animator.Play("Attack", 0);
                     DamagaDoMethod();
-
                 }
             }
         }
         public void DamagaDoMethod()
         {
-            //PlayerData.
+            GameManager.gameManager._playerHealth.DamageUnit(10);
+            GameManager.gameManager.UpdateHealthBar(GameManager.gameManager._playerHealth.Health);
+            Debug.Log(GameManager.gameManager._playerHealth.Health);
         }
 
         public override State ExecuteCurrentState(StateManager Manager)
