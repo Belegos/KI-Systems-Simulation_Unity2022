@@ -1614,10 +1614,10 @@
     "m_Guid": {
         "m_GuidSerialized": "68caceba-5747-4c40-98a9-ddc042aae5a6"
     },
-    "m_Name": "Displacement",
+    "m_Name": "WaveStrength",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Displacement",
-    "m_DefaultReferenceName": "_Displacement",
+    "m_RefNameGeneratedByDisplayName": "WaveStrength",
+    "m_DefaultReferenceName": "_WaveStrength",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1626,7 +1626,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.5,
+    "m_Value": 0.7099999785423279,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -5701,7 +5701,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "e4763fb8f0164b7aadb8d7e932a9ca4e",
     "m_Id": 0,
-    "m_DisplayName": "Displacement",
+    "m_DisplayName": "WaveStrength",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
