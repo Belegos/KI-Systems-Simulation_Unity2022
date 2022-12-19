@@ -64,7 +64,7 @@ Material:
     - _CullModeForward: 2
     - _Depth: 0.21
     - _DepthOffsetEnable: 0
-    - _Displacement: 0.19
+    - _Displacement: 0.71
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
@@ -91,7 +91,7 @@ Material:
     - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 14
     - _StencilWriteMaskMV: 40
-    - _Strenght: 0.37
+    - _Strenght: 0.516
     - _SupportDecals: 1
     - _SurfaceType: 1
     - _TransparentBackfaceEnable: 0

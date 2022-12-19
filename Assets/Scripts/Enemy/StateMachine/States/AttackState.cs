@@ -25,6 +25,7 @@ namespace StateManager
         public void DamagaDoMethod()
         {
             GameManager.gameManager._playerHealth.DamageUnit(10);
+            GameManager.gameManager.UpdateHealthBar(GameManager.gameManager._playerHealth.Health);
             Debug.Log(GameManager.gameManager._playerHealth.Health);
         }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] HealthBarScript _healthBar;
     public static GameManager gameManager 
     {
         get;
@@ -23,6 +24,16 @@ public class GameManager : MonoBehaviour
         {
             gameManager = this;
         }
+    }
+    private void Start()
+    {
+            _healthBar.SetMaxHealth(_playerHealth.MaxHealth);
+            _healthBar.SetHealth(_playerHealth.Health);
+    }
+
+    public void UpdateHealthBar(int newCurrentHealth)
+    {
+        _healthBar.SetHealth(newCurrentHealth);
     }
 
 
