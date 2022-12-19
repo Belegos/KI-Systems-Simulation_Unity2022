@@ -70,10 +70,6 @@ namespace StateManager
         [SerializeField] private GameObject myTarget;
         [SerializeField] private GameObject currentTarget;
         [SerializeField] private GameObject _currentEnemyEntity;
-        private event PropertyChangedEventHandler PropertyChanged;
-        
-
-
 
         [SerializeField] private string _searchForTag = "Player";
         [SerializeField] private int _range = 3;
@@ -83,17 +79,8 @@ namespace StateManager
         [SerializeField] private Vector3 _startPosition;
         private float velocity;
         private int VelocityHash;
-
-        [SerializeField] private float radius = 2.0f;
-        [SerializeField] private float lineWidth = 1;
         private float _coolDownTimer;
-
-
-
-        //private void OnEnable() => PropertyChanged += PlayerData.
-        //private void OnDisable() => PropertyChanged -= 
-
-
+ 
         private void Start()
         {
             VelocityHash = Animator.StringToHash("Velocity");
@@ -119,7 +106,6 @@ namespace StateManager
             MovementAnimation();
             RunStateMachine();
             TargetNullCheck();
-            DrawCircle2D();
 
             if (CoolDownTimer >= 0)
             {
@@ -130,6 +116,7 @@ namespace StateManager
                 attackState.AttackIsReady = true;
             }
         }
+        #region Methods
 
         private void CheckDistanceBetweenEnemyAndPlayer()
         {
@@ -144,25 +131,6 @@ namespace StateManager
         }
 
 
-        #region Methods
-        private void DrawCircle2D()
-        {
-            var segments = 360;
-            LineRenderer.useWorldSpace = false;
-            LineRenderer.startWidth = lineWidth;
-            LineRenderer.endWidth = lineWidth;
-            LineRenderer.positionCount = segments + 1;
-
-            var pointCount = segments + 1; //closes gap between start and end
-            var points = new Vector3[pointCount];
-
-            for (int i = 0; i < pointCount; i++)
-            {
-                var rad = Mathf.Deg2Rad * (i * 360f / segments);
-                points[i] = new Vector3(Mathf.Sin(rad) * radius, 0, Mathf.Cos(rad) * rad);
-            }
-            LineRenderer.SetPositions(points);
-        }
         private void MovementAnimationOld() //sets NavAgent.velocity and updates float for blendtree
         {
             if (NavAgent.velocity.x < 0)
@@ -247,7 +215,7 @@ namespace StateManager
             }
         }
 
-        private void MovementAnimation()
+        private void MovementAnimation() //sets NavAgent.velocity and updates float for blendtree animations
         {
             velocity = NavAgent.velocity.magnitude / NavAgent.speed;
             animator.SetFloat(VelocityHash, velocity);
