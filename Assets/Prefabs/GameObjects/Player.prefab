@@ -1363,7 +1363,7 @@ GameObject:
   - component: {fileID: 1675414963454179314}
   - component: {fileID: 1675414963454179315}
   - component: {fileID: 1675414963454179276}
-  - component: {fileID: 7354100570656234923}
+  - component: {fileID: 1675414963454179277}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -1452,7 +1452,7 @@ MonoBehaviour:
   moveAmount: 0
   mouseX: 0
   mouseY: 0
---- !u!114 &7354100570656234923
+--- !u!114 &1675414963454179277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1461,9 +1461,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1675414963454179275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0a2008fca4692d4fbc6724651051d4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 252b5033d05f13742b00afb586ed056e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentHealth: 0
+  _maxHealth: 100
+  slider: {fileID: 0}
+  textComp: {fileID: 0}
+  SliderGameObject: {fileID: 0}
 --- !u!1 &1675414963520854913
 GameObject:
   m_ObjectHideFlags: 0
