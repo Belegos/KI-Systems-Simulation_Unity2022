@@ -63,7 +63,6 @@ namespace StateManager
         private AttackState attackState;
         private Animator animator;
         private NavMeshAgent NavAgent;
-        private LineRenderer LineRenderer;
 
         [SerializeField] private bool _isInChaseRange;
         [SerializeField] private bool _isInAttackRange;
@@ -77,13 +76,13 @@ namespace StateManager
         [SerializeField] private int _attackRange = 1;
         [SerializeField] private int _attackDamage = 1;
         [SerializeField] private Vector3 _startPosition;
-        private float velocity;
-        private int VelocityHash;
+        private float velocity; //parameter for animator can't be written with an underscore, otherwise it won't work
+        private int _velocityHash;
         private float _coolDownTimer;
  
         private void Start()
         {
-            VelocityHash = Animator.StringToHash("Velocity");
+            _velocityHash = Animator.StringToHash("velocity");
 
             _startPosition = this.transform.position;
             myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
@@ -95,7 +94,6 @@ namespace StateManager
 
             NavAgent = GetComponent<NavMeshAgent>();
             animator = GetComponentInChildren<Animator>();
-            LineRenderer = GetComponent<LineRenderer>();
             InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
             InvokeRepeating("CheckDistanceBetweenEnemyAndPlayer", 0, 0.5f); //checks every 0.5 sec if the target is in _attackRange, if true sets bool IsInAttackRange, for attack state switch
 
@@ -141,7 +139,7 @@ namespace StateManager
             {
                 velocity = NavAgent.velocity.x;
             }
-            animator.SetFloat(VelocityHash, velocity);
+            animator.SetFloat(_velocityHash, velocity);
         }
         private void RunStateMachine() //checks for current state and switchs if nessesary
         {
@@ -218,7 +216,7 @@ namespace StateManager
         private void MovementAnimation() //sets NavAgent.velocity and updates float for blendtree animations
         {
             velocity = NavAgent.velocity.magnitude / NavAgent.speed;
-            animator.SetFloat(VelocityHash, velocity);
+            animator.SetFloat(_velocityHash, velocity);
         }
         #endregion
     }
