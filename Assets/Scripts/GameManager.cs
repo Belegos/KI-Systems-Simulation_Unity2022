@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] HealthBarScript _healthBar;
-    public static GameManager gameManager 
+    public static GameManager _gameManager 
     {
         get;
         private set;
@@ -16,14 +16,15 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (gameManager != null && gameManager != this)
+        if (_gameManager != null && _gameManager != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            gameManager = this;
+            _gameManager = this;
         }
+        DontDestroyOnLoad(this.gameObject);
     }
     private void Start()
     {
