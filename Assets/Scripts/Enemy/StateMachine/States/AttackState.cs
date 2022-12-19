@@ -24,9 +24,9 @@ namespace StateManager
         }
         public void DamagaDoMethod()
         {
-            GameManager.gameManager._playerHealth.DamageUnit(10);
-            GameManager.gameManager.UpdateHealthBar(GameManager.gameManager._playerHealth.Health);
-            Debug.Log(GameManager.gameManager._playerHealth.Health);
+            GameManager._gameManager._playerHealth.DamageUnit(10);
+            GameManager._gameManager.UpdateHealthBar(GameManager._gameManager._playerHealth.Health);
+            Debug.Log(GameManager._gameManager._playerHealth.Health);
         }
 
         public override State ExecuteCurrentState(StateManager Manager)
