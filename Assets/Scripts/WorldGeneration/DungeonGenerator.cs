@@ -20,6 +20,7 @@ public class DungeonGenerator : MonoBehaviour
     private void Awake()
     {
         GenerateMap(_level);
+        Debug.LogWarning(LogMap(map));
     }
 
     private void GenerateMap(int _level)
@@ -69,23 +70,85 @@ public class DungeonGenerator : MonoBehaviour
                 currPosToExpamd + Vector2Int.down,
                 currPosToExpamd + Vector2Int.left
             };
-            for (int checkPosIdc = 0; checkPosIdc < positionsToCheck.Length; checkPosIdc++)
+            for (int checkPosIdx = 0; checkPosIdx < positionsToCheck.Length; checkPosIdx++)
             {
-                Vector2Int toCheck = positionsToCheck[checkPosIdc];
+                Vector2Int toCheck = positionsToCheck[checkPosIdx];
 
                 //check if in bounds
                 if (toCheck.x >= 0 && toCheck.x < MAP_WIDTH && toCheck.y >= 0 && toCheck.y < MAP_HIGHT) //checks if in bounds of array
                 {
                     //Rule 1: if enough rooms => continue to next room
+                    if (currRoomCount >= _numRoomsToGenerate) { continue; }
+                    //Rule 2: if there is already a room => continue to next room
+                    if (_baseLevel[toCheck.x,toCheck.y] != ERoomTypes.empty) { continue; }
+                    //Rule 3: coinflip rnd chance to skip room => continue to next room
+                    float rndPercent = Random.Range(0f, 1f);
+                    if(rndPercent <= 0.5f) { continue; }
 
-                    //Rule 2:
+                    //Rule 4: if more than one neihgbour room is at position => continue to next Room
+                    int neighbourCount = GetNeighbourCount(_baseLevel, toCheck);
+                    if(neighbourCount < 1) { continue; }
 
-                    //Rule 3:
+                    //Generate Room
 
+                    _baseLevel[toCheck.x, toCheck.y] = ERoomTypes.normal;
+                    positionsToExpand.Enqueue(toCheck);
+                    currRoomCount++;
                 }
             }
         }
 
         return _baseLevel;
+    }
+
+    private int GetNeighbourCount(ERoomTypes[,] _level, Vector2Int _positionToCheck)
+    {
+        int count = 0;
+
+        Vector2Int[] positionsToCheck = new Vector2Int[]
+        {
+            _positionToCheck + Vector2Int.up,
+            _positionToCheck + Vector2Int.right,
+            _positionToCheck + Vector2Int.down,
+            _positionToCheck + Vector2Int.left
+        };
+
+        for (int neighbourPosIdx = 0; neighbourPosIdx < positionsToCheck.Length; neighbourPosIdx++)
+        {
+            Vector2Int toCheck = positionsToCheck[neighbourPosIdx];
+
+            if(toCheck.x >= 0 && toCheck.x < MAP_WIDTH && toCheck.y >= 0 && toCheck.y < MAP_HIGHT)
+            {
+                if (_level[toCheck.x, toCheck.y] != ERoomTypes.empty)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private string LogMap(ERoomTypes[,] _map) //generate a output string, to better see roomtypes
+    {
+        int mapWidth = _map.GetLength(0);
+        int mapHeight = _map.GetLength(1);
+
+        string output = "";
+        for (int y = 0; y < mapHeight; y++)
+        {
+            output += "|";
+            for (int x = 0; x < mapWidth; x++)
+            {
+                int num = (int)_map[x, y];
+                if(num >= 0)
+                {
+                    output += " ";
+                }
+                output += num + "|";
+            }
+            output += "\n";
+        }
+        return output;
     }
 }
