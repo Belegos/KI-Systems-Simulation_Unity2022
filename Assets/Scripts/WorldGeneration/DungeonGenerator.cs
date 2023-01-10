@@ -129,6 +129,13 @@ public class DungeonGenerator : MonoBehaviour
         return count;
     }
 
+    //private bool ValidateMap(ERoomTypes[,] _level)
+    //{
+
+    //    return; 
+    //}
+
+
     private string LogMap(ERoomTypes[,] _map) //generate a output string, to better see roomtypes
     {
         int mapWidth = _map.GetLength(0);
