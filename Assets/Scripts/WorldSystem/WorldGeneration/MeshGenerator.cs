@@ -1,0 +1,71 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class MeshGenerator
+{
+    public static MeshData GenerateTerrainMesh(float[,] heightMap)
+    {
+        int width = heightMap.GetLength(0); //first dimension of the array to get the width
+        int height = heightMap.GetLength(0);//second dimension of the array to get the height
+        float topLeftX = (width - 1) / -2f;
+        float topLeftZ = (height - 1) / 2f;
+
+        MeshData meshData = new MeshData(width, height);
+        int vertexIndex = 0;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightMap[x, y], topLeftZ - y); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
+                meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
+                
+                if (x < width - 1 && y < height - 1)//ignoring right and bottom verticies of the map
+                {
+                    meshData.AddTriangle(vertexIndex, vertexIndex + width + 1, vertexIndex + width);
+                    //i = vertexIndex 
+                    //i + width + 1 = vertexIndex of the vertex to the right and down 
+                    //i + width = vertexIndex of the vertex down
+                    meshData.AddTriangle(vertexIndex + width + 1, vertexIndex, vertexIndex + 1);
+                }
+
+                vertexIndex++; //Index to keep track, where we are in the 1D-Array
+            }
+        }
+        return meshData; //important for later threading
+    }
+}
+public class MeshData
+{
+    public Vector3[] vertices;
+    public int[] triangles;
+    public Vector2[] uvs;
+
+    int triangleIndex;
+
+    public MeshData(int meshWidth, int meshHeight)
+    {
+        vertices = new Vector3[meshWidth * meshHeight];
+        uvs = new Vector2[meshWidth * meshHeight];
+        triangles = new int[(meshWidth - 1) * (meshHeight - 1) * 6];
+    }
+
+    public void AddTriangle(int a, int b, int c) // a,b,c are the verticies
+    {
+        triangles[triangleIndex] = a;
+        triangles[triangleIndex + 1] = b;
+        triangles[triangleIndex + 2] = c;
+        triangleIndex += 3;
+    }
+
+    public Mesh CreateMesh()
+    {
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices; //equals to vertices array
+        mesh.triangles = triangles; //equals to triangles array
+        mesh.uv = uvs; //equals to uvs array
+        mesh.RecalculateNormals();//important to make light work correctly
+        return mesh;
+    }
+}
