@@ -7,7 +7,10 @@ public class MapGenerator : MonoBehaviour
     public enum DrawMode { NoiseMap, ColorMap, Mesh };
     public DrawMode drawMode;
 
-    const int mapChunkSize = 241; //241^2 is the max size of a mesh, can have "LODs" of i=2,4,6,8,10,12
+    //public const int mapChunkSize = 241;
+
+    public const int mapChunkSize = 241;//241^2 is the max size of a mesh, can have "LODs" of i=2,4,6,8,10,12
+
     [Range(0, 6)]
     public int levelOfDetail;//incement of LevelDetail
     public float noiseScale;
