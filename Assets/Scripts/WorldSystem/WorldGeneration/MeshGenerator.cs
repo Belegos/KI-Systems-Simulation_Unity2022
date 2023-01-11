@@ -4,8 +4,9 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve,int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve, int levelOfDetail)
     {
+        AnimationCurve heightCurveThreaded = new AnimationCurve(heightCurve.keys);//prevent AnimationCurve from returning wrong values
         int width = heightMap.GetLength(0); //first dimension of the array to get the width
         int height = heightMap.GetLength(0);//second dimension of the array to get the height
         float topLeftX = (width - 1) / -2f;
@@ -18,13 +19,17 @@ public static class MeshGenerator
         MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
 
-        for (int y = 0; y < height; y+= meshSimplificationIncrement)
+        for (int y = 0; y < height; y += meshSimplificationIncrement)
         {
-            for (int x = 0; x < width; x+= meshSimplificationIncrement)
+            for (int x = 0; x < width; x += meshSimplificationIncrement)
             {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x,heightCurve.Evaluate(heightMap[x, y])*heightMultiplier, topLeftZ - y); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
+#region lock the heightCurve to stop threads form multithreading
+                //lock (heightCurve){
+                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier, topLeftZ - y); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
+                //}
+#endregion
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
-                
+
                 if (x < width - 1 && y < height - 1)//ignoring right and bottom verticies of the map
                 {
                     meshData.AddTriangle(vertexIndex, vertexIndex + verticesPerLine + 1, vertexIndex + verticesPerLine);
