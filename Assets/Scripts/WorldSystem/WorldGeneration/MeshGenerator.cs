@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve, int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail)
     {
-        AnimationCurve heightCurveThreaded = new AnimationCurve(heightCurve.keys);//prevent AnimationCurve from returning wrong values
+        AnimationCurve heightCurveThreaded = new AnimationCurve(_heightCurve.keys);//prevent AnimationCurve from returning wrong values, each Thread got his own heightCurve
         int width = heightMap.GetLength(0); //first dimension of the array to get the width
         int height = heightMap.GetLength(0);//second dimension of the array to get the height
         float topLeftX = (width - 1) / -2f;
@@ -25,7 +25,7 @@ public static class MeshGenerator
             {
 #region lock the heightCurve to stop threads form multithreading
                 //lock (heightCurve){
-                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier, topLeftZ - y); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
+                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightCurveThreaded.Evaluate(heightMap[x, y]) * heightMultiplier, topLeftZ - y); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
                 //}
 #endregion
                 meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
