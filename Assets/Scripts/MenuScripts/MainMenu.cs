@@ -5,13 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public string levelSelection;
+    public string levelSelection1;
+    public string levelSelection2;
+    public string levelSelection3;
     public string pauseMenu;
     public GameObject OptionSceneImg;
+    public GameObject LevelSelectoionSceneImg;
 
     public void StartGame()
     {
-        SceneManager.LoadScene(levelSelection);
+        SceneManager.LoadScene(levelSelection1);
     }
 
     public void OpenOptions()
@@ -22,6 +25,16 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
         OptionSceneImg.SetActive(false);
+    }    
+    
+    public void OpenLevelSelectoionSceneImg()
+    {
+        LevelSelectoionSceneImg.SetActive(true);
+    }
+
+    public void CloseLevelSelectoionSceneImg()
+    {
+        LevelSelectoionSceneImg.SetActive(false);
     }
     public void CloseGame()
     {
