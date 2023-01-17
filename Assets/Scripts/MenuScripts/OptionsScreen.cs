@@ -36,6 +36,15 @@ public class OptionsScreen : MonoBehaviour
                 UpdateResolutionLabel();
             }
         }
+        if (!foundRes)
+        {
+            ResItem newRes = new ResItem();
+            newRes.Width = Screen.width;
+            newRes.Height = Screen.height;
+            Resolutions.Add(newRes);
+            selectedRes = Resolutions.Count - 1;
+            UpdateResolutionLabel();
+        }
     }
     public void ResLeft()
     {
