@@ -5,13 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public string levelSelection1;
-    public string levelSelection2;
-    public string levelSelection3;
+    public string levelSelection1 = "WorldLandGeneration";
+    public string levelSelection2 = "DungeonScene";
+    public string levelSelection3 = "WaterScene";
     public string pauseMenu;
     public GameObject OptionSceneImg;
     public GameObject LevelSelectoionSceneImg;
-
+    
     public void StartGame()
     {
         SceneManager.LoadScene(levelSelection1);
@@ -25,8 +25,8 @@ public class MainMenu : MonoBehaviour
     public void CloseOptions()
     {
         OptionSceneImg.SetActive(false);
-    }    
-    
+    }
+    #region LevelSelection
     public void OpenLevelSelectoionSceneImg()
     {
         LevelSelectoionSceneImg.SetActive(true);
@@ -36,6 +36,20 @@ public class MainMenu : MonoBehaviour
     {
         LevelSelectoionSceneImg.SetActive(false);
     }
+
+    public void LoadLevelOne()
+    {
+        SceneManager.LoadScene(levelSelection1);
+    }
+    public void LoadLevelTwo()
+    {
+        SceneManager.LoadScene(levelSelection2);
+    }
+    public void LoadLevelThree()
+    {
+        SceneManager.LoadScene(levelSelection3);
+    }
+    #endregion
     public void CloseGame()
     {
 #if UNITY_EDITOR

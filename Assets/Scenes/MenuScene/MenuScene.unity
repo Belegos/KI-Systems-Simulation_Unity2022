@@ -441,7 +441,7 @@ RectTransform:
   m_Children:
   - {fileID: 876561232}
   m_Father: {fileID: 547656292}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -811,12 +811,6 @@ MonoBehaviour:
   VsyncToggle: {fileID: 1516174872}
   ResolutionText: {fileID: 1852139882}
   Resolutions:
-  - Width: 3440
-    Height: 1440
-  - Width: 2580
-    Height: 1080
-  - Width: 1920
-    Height: 1440
   - Width: 1920
     Height: 1080
   - Width: 1440
@@ -1096,7 +1090,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 547656292}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1229,17 +1223,17 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1698009624}
-  - {fileID: 168999407}
-  - {fileID: 2055122050}
   - {fileID: 476588091}
+  - {fileID: 2055122050}
+  - {fileID: 168999407}
+  - {fileID: 1698009624}
   m_Father: {fileID: 1645933512}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 990, y: -672.8124}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 990, y: -556.88}
+  m_SizeDelta: {x: 1980, y: 1113.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &547656293
 MonoBehaviour:
@@ -2756,7 +2750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseOptions
+      value: LoadLevelTwo
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3160,7 +3154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelSelection1: WorldLandGeneration
   levelSelection2: DungeonScene
-  levelSelection3: 
+  levelSelection3: WaterScene
   pauseMenu: PauseScene
   OptionSceneImg: {fileID: 317885468}
   LevelSelectoionSceneImg: {fileID: 1279671902}
@@ -3404,7 +3398,7 @@ RectTransform:
   m_Children:
   - {fileID: 931796643}
   m_Father: {fileID: 547656292}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3630,7 +3624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseOptions
+      value: LoadLevelOne
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -4195,7 +4189,7 @@ RectTransform:
   m_Children:
   - {fileID: 2074157836}
   m_Father: {fileID: 547656292}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4796,7 +4790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseOptions
+      value: LoadLevelThree
       objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
