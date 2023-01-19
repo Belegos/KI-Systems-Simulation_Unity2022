@@ -5,6 +5,7 @@ using static MapGenerator;
 public class EndlessTerrain : MonoBehaviour
 {
     public LODInfo[] detailLevels;
+    const float scale = 1f; //scales whole map
     const float viewerMoveForUpdate = 25f;
     const float sqrviewerMoveForUpdate = viewerMoveForUpdate * viewerMoveForUpdate;
     public static float maxViewDst;
@@ -32,7 +33,7 @@ public class EndlessTerrain : MonoBehaviour
     }
     private void Update()
     {
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+        viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
 
         if ((viewerPositionOld - viewerPosition).sqrMagnitude > sqrviewerMoveForUpdate) //threshold to stop chunks updating every frame
         {
@@ -98,8 +99,9 @@ public class EndlessTerrain : MonoBehaviour
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshRenderer.material = material;
 
-            meshObject.transform.position = positionV3;
+            meshObject.transform.position = positionV3 * scale;
             meshObject.transform.parent = parent;
+            meshObject.transform.localScale = Vector3.one * scale;
             SetVisible(false);
 
             lodMeshes = new LODMesh[detailLevels.Length];
