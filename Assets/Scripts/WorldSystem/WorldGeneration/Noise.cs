@@ -7,7 +7,7 @@ using UnityEngine;
 /// Noise class to generate a noise map
 /// Two possible modes:
 /// SingleMode for a single noise map
-/// EndlessMode for a noise map that is infinite
+/// EndlessMode for a noise map that is infinite 
 /// </summary>
 public static class Noise
 {
