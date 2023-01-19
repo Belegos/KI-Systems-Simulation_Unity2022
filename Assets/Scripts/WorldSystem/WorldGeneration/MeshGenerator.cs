@@ -13,7 +13,7 @@ public static class MeshGenerator
         float topLeftZ = (height - 1) / 2f;
 
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
-        //handles increament of the mesh simplification(LOD), if levelOfDetail is 0, then it is 1, else it is levelOfDetail * 2
+        //handles increament of the mesh simplification(LOD), if editorPreviewLOD is 0, then it is 1, else it is editorPreviewLOD * 2
         int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
 
         MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);

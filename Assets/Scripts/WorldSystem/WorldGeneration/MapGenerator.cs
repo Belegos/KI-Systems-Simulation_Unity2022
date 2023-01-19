@@ -14,7 +14,7 @@ public class MapGenerator : MonoBehaviour
     public const int mapChunkSize = 241;//241^2 is the max size of a mesh, can have "LODs" of i=2,4,6,8,10,12
 
     [Range(0, 6)]
-    public int levelOfDetail;//incement of LevelDetail
+    public int editorPreviewLOD;//incement of LevelDetail
     public float noiseScale;
 
     public int octaves;
@@ -32,6 +32,25 @@ public class MapGenerator : MonoBehaviour
 
     Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
+    void Update()
+    {
+        if (mapDataThreadInfoQueue.Count > 0)
+        {
+            for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
+            {
+                MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+                threadInfo.callback(threadInfo.parameter);
+            }
+        }
+        if (meshDataThreadInfoQueue.Count > 0)
+        {
+            for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
+            {
+                MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
+                threadInfo.callback(threadInfo.parameter);
+            }
+        }
+    }
 
     public void DrawMapInEditor()
     {
@@ -47,7 +66,7 @@ public class MapGenerator : MonoBehaviour
         }
         else if (drawMode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail),
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorPreviewLOD),
                 TextureGenerator.TextureFromColorMap(mapData.colorMap, mapChunkSize, mapChunkSize));//hand over meshData and ColorMap and Size
         }
     }
@@ -110,44 +129,25 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public void RequestMeshData(MapData mapData, Action<MeshData> callback)
+    public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
     {
         ThreadStart threadStart = delegate
         {
-            MeshDataThreaded(mapData, callback);
+            MeshDataThreaded(mapData, lod, callback);
         };
         new Thread(threadStart).Start();
     }
 
-    void MeshDataThreaded(MapData mapData, Action<MeshData> callback)
+    void MeshDataThreaded(MapData mapData, int lod, Action<MeshData> callback)
     {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail);
+        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, lod);
         lock (meshDataThreadInfoQueue)
         {
             meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
         }
     }
 
-    void Update()
-    {
-        if (mapDataThreadInfoQueue.Count > 0)
-        {
-            for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
-            {
-                MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
-                threadInfo.callback(threadInfo.parameter);
-            }
-        }
-        if (meshDataThreadInfoQueue.Count > 0)
-        {
-            for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
-            {
-                MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
-                threadInfo.callback(threadInfo.parameter);
-            }
-        }
-    }
-
+    #region Structs
     struct MapThreadInfo<T> //generic struct to handle both kinds of mapData(colorMap and heightMap)
     {
         public readonly Action<T> callback; //readonly because structs should be immutable
@@ -160,7 +160,6 @@ public class MapGenerator : MonoBehaviour
         }
 
     }
-
 
     public struct MapData //stores the Data for the Map (heightMap and colorMap) for usage in other methodes
     {
@@ -180,4 +179,5 @@ public class MapGenerator : MonoBehaviour
         public float height;
         public Color color;
     }
+    #endregion
 }
