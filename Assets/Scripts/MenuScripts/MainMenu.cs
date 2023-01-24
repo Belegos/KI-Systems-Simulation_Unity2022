@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class MainMenu : MonoBehaviour
     public string levelSelection2 = "DungeonScene";
     public string levelSelection3 = "WaterScene";
     public string pauseMenu;
-    public GameObject OptionSceneImg;
-    public GameObject LevelSelectoionSceneImg;
+    [FormerlySerializedAs("OptionSceneImg")] public GameObject optionSceneImg;
+    [FormerlySerializedAs("LevelSelectoionSceneImg")] public GameObject levelSelectoionSceneImg;
     
     public void StartGame()
     {
@@ -19,22 +20,22 @@ public class MainMenu : MonoBehaviour
 
     public void OpenOptions()
     {
-        OptionSceneImg.SetActive(true);
+        optionSceneImg.SetActive(true);
     }
 
     public void CloseOptions()
     {
-        OptionSceneImg.SetActive(false);
+        optionSceneImg.SetActive(false);
     }
     #region LevelSelection
     public void OpenLevelSelectoionSceneImg()
     {
-        LevelSelectoionSceneImg.SetActive(true);
+        levelSelectoionSceneImg.SetActive(true);
     }
 
     public void CloseLevelSelectoionSceneImg()
     {
-        LevelSelectoionSceneImg.SetActive(false);
+        levelSelectoionSceneImg.SetActive(false);
     }
 
     public void LoadLevelOne()

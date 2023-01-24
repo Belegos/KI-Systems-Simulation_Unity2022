@@ -13,11 +13,11 @@ namespace KI_Project
         public float mouseX;
         public float mouseY;
 
-        private PlayerControls inputActions;
+        private PlayerControls _inputActions;
         private CameraHandler _cameraHandler;
 
-        private Vector2 movementInput;
-        private Vector2 cameraInput;
+        private Vector2 _movementInput;
+        private Vector2 _cameraInput;
 
         private void Awake()
         {
@@ -37,20 +37,20 @@ namespace KI_Project
 
         public void OnEnable()
         {
-            if (inputActions == null)
+            if (_inputActions == null)
             {
-                inputActions = new PlayerControls();
-                inputActions.PlayerMovement.Movement.performed +=
-                    inputActions => movementInput = inputActions.ReadValue<Vector2>();
-                inputActions.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
+                _inputActions = new PlayerControls();
+                _inputActions.PlayerMovement.Movement.performed +=
+                    inputActions => _movementInput = inputActions.ReadValue<Vector2>();
+                _inputActions.PlayerMovement.Camera.performed += i => _cameraInput = i.ReadValue<Vector2>();
             }
 
-            inputActions.Enable();
+            _inputActions.Enable();
         }
 
         private void OnDisable()
         {
-            inputActions.Disable();
+            _inputActions.Disable();
         }
 
         public void TickInput(float delta)
@@ -60,11 +60,11 @@ namespace KI_Project
 
         public void MoveInput(float delta)
         {
-            horizontal = movementInput.x;
-            vertical = movementInput.y;
+            horizontal = _movementInput.x;
+            vertical = _movementInput.y;
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
-            mouseX = cameraInput.x;
-            mouseY = cameraInput.y;
+            mouseX = _cameraInput.x;
+            mouseY = _cameraInput.y;
         }
     }
 }

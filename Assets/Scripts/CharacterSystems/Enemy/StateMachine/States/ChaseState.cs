@@ -7,29 +7,29 @@ namespace StateManager
     [System.Serializable]
     public class ChaseState : State
     {
-        public override State ExecuteCurrentState(StateManager Manager)
+        public override State ExecuteCurrentState(StateManager manager)
         {
 
-            if (Manager.IsInChaseRange && Manager.IsInAttackRange)//when player is in chase range and in attack range, switch to attack state
+            if (manager.IsInChaseRange && manager.IsInAttackRange)//when player is in chase range and in attack range, switch to attack state
             {
-                return Manager.AttackState;
+                return manager.AttackState;
             }
-            if (!Manager.IsInChaseRange) //when player is not in sightrange, return to idle
+            if (!manager.IsInChaseRange) //when player is not in sightrange, return to idle
             {
-                return Manager.IdleState;
+                return manager.IdleState;
             }
-            if (!Manager.IsInAttackRange && !Manager.IsInChaseRange) //when player is not in sight and in attack range, return to idle
+            if (!manager.IsInAttackRange && !manager.IsInChaseRange) //when player is not in sight and in attack range, return to idle
             {
-                return Manager.IdleState;
+                return manager.IdleState;
             }
-            if (!Manager.IsInAttackRange && Manager.IsInChaseRange)
+            if (!manager.IsInAttackRange && manager.IsInChaseRange)
             {
                 return this;
             }
             else //should never happen. Debug-Fallback
             {
                 Debug.Log("Something went wrong in Statemanager. Returning to Idle");
-                return Manager.IdleState;
+                return manager.IdleState;
             }
         }
     }

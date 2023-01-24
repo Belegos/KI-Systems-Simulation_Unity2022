@@ -6,7 +6,7 @@ namespace StateManager
 {
     public interface IAttack
     {
-        void Attack(StateManager Manager);
+        void Attack(StateManager manager);
     }
 
 }

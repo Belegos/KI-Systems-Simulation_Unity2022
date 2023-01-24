@@ -1,38 +1,39 @@
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace StateManager
 {
     [System.Serializable]
     public class AttackState : State, IAttack
     {
-        [SerializeField] private GameObject Enemy;
-        [SerializeField] public bool AttackIsReady = true;
-        public void Attack(StateManager Manager)
+        [FormerlySerializedAs("Enemy")] [SerializeField] private GameObject enemy;
+        [FormerlySerializedAs("AttackIsReady")] [SerializeField] public bool attackIsReady = true;
+        public void Attack(StateManager manager)
         {
-            if (Vector3.Distance(Manager.CurrentEnemyEntity.transform.position, Manager.CurrentTaget.transform.position) <= 1)
+            if (Vector3.Distance(manager.CurrentEnemyEntity.transform.position, manager.CurrentTaget.transform.position) <= 1)
             {
-                if (AttackIsReady)
+                if (attackIsReady)
                 {
-                    AttackIsReady = false;
-                    Manager.CoolDownTimer = 2f;
+                    attackIsReady = false;
+                    manager.CoolDownTimer = 2f;
                     Debug.Log("Animation Attack");
-                    Manager.Animator.Play("Attack", 0);
+                    manager.Animator.Play("Attack", 0);
                     DamagaDoMethod();
                 }
             }
         }
         public void DamagaDoMethod()
         {
-            GameManager._gameManager._playerHealth.DamageUnit(10);
-            GameManager._gameManager.UpdateHealthBar(GameManager._gameManager._playerHealth.Health);
-            Debug.Log(GameManager._gameManager._playerHealth.Health);
+            GameManager._gameManager.PlayerHealth.DamageUnit(10);
+            GameManager._gameManager.UpdateHealthBar(GameManager._gameManager.PlayerHealth.Health);
+            Debug.Log(GameManager._gameManager.PlayerHealth.Health);
         }
 
-        public override State ExecuteCurrentState(StateManager Manager)
+        public override State ExecuteCurrentState(StateManager manager)
         {
-            Attack(Manager);
-            return Manager.ChaseState;
+            Attack(manager);
+            return manager.ChaseState;
         }
     }
 }
