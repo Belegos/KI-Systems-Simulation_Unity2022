@@ -1,13 +1,11 @@
-using NUnit.Framework.Internal;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    [FormerlySerializedAs("_level")] [SerializeField] private int level = 1;
-    [FormerlySerializedAs("_levlelMultiplier")] [SerializeField][Range(2.6f, 5.0f)] private float levlelMultiplier = 2.6f;
+    [SerializeField] private int level = 1;
+    [SerializeField][Range(2.6f, 5.0f)] private float levleMultiplier = 2.6f;
     private enum ERoomTypes
     {
         Empty = -1,
@@ -35,7 +33,7 @@ public class DungeonGenerator : MonoBehaviour
                 _map[x, y] = ERoomTypes.Empty; //sets all rooms to empty to be save, there is no error
             }
         }
-        int neededRoomCount = Random.Range(0, 2) + 5 + (int)(level * levlelMultiplier);
+        int neededRoomCount = Random.Range(0, 2) + 5 + (int)(level * levleMultiplier);
 
         int maxInterations = 3000;//prevents infinite loops
         int currentIterations = 0;
