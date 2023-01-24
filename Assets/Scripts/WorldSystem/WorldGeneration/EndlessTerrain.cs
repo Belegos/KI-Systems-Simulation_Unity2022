@@ -5,7 +5,7 @@ using static MapGenerator;
 public class EndlessTerrain : MonoBehaviour
 {
     public LODInfo[] detailLevels;
-    const float Scale = 2f; //scales whole map
+    const float Scale = 1f; //scales whole map
     const float ViewerMoveForUpdate = 25f;
     const float SqrviewerMoveForUpdate = ViewerMoveForUpdate * ViewerMoveForUpdate;
     public static float MaxViewDst;
