@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class FalloffGenerator 
@@ -26,7 +24,7 @@ public static class FalloffGenerator
         return map;
     }
     /// <summary>
-    /// modifyes the falloffMap to be less strong at the center and more stronger on the edges
+    /// modifies the falloffMap to be less strong at the center and more stronger on the edges
     /// Formula:
     /// f(x)= (x^a)/((x^a)+(b-b*x)^a)
     /// </summary>
