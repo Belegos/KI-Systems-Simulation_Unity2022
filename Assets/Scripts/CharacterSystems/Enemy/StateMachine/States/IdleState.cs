@@ -7,13 +7,13 @@ namespace StateManager
     [System.Serializable]
     public class IdleState : State
     {
-        public override State ExecuteCurrentState(StateManager Manager)
+        public override State ExecuteCurrentState(StateManager manager)
         {
-            if (!Manager.IsInChaseRange)
+            if (!manager.IsInChaseRange)
             {
                 return this;
             }
-            else return Manager.ChaseState;
+            else return manager.ChaseState;
 
         }
     }

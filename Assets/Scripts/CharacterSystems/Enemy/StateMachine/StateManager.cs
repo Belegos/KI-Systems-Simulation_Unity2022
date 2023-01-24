@@ -3,47 +3,48 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
+using UnityEngine.Serialization;
 
 namespace StateManager
 {
-    public class StateManager : MonoBehaviour, SearchForTag
+    public class StateManager : MonoBehaviour, ISearchForTag
     {
         #region props
-        public IdleState IdleState { get => idleState; }
-        public ChaseState ChaseState { get => chaseState; }
-        public AttackState AttackState { get => attackState; }
+        public IdleState IdleState { get => _idleState; }
+        public ChaseState ChaseState { get => _chaseState; }
+        public AttackState AttackState { get => _attackState; }
         public bool IsInAttackRange
         {
-            get { return _isInAttackRange; ; }
-            set { _isInAttackRange = value; }
+            get { return isInAttackRange; ; }
+            set { isInAttackRange = value; }
         }
 
         public bool IsInChaseRange
         {
-            get { return _isInChaseRange; }
-            set { _isInChaseRange = value; }
+            get { return isInChaseRange; }
+            set { isInChaseRange = value; }
         }
         public State CurrentState
         {
             get
             {
-                return currentState;
+                return _currentState;
             }
             private set
             {
-                currentState = value;
+                _currentState = value;
             }
         }
         public Animator Animator
         {
-            get { return animator; }
-            set { animator = value; }
+            get { return _animator; }
+            set { _animator = value; }
         }
         public GameObject CurrentTaget { get => currentTarget; }
 
         public GameObject CurrentEnemyEntity
         {
-            get { return _currentEnemyEntity; }
+            get { return currentEnemyEntity; }
         }
         public float CoolDownTimer
         {
@@ -51,32 +52,32 @@ namespace StateManager
             set { _coolDownTimer = value; }
         }
         public int AttackDamage {
-            get { return _attackDamage; }
-            set { _attackDamage = value; }
+            get { return attackDamage; }
+            set { attackDamage = value; }
         }
 
         #endregion
 
-        private State currentState;
-        private IdleState idleState;
-        private ChaseState chaseState;
-        private AttackState attackState;
-        private Animator animator;
-        private NavMeshAgent NavAgent;
+        private State _currentState;
+        private IdleState _idleState;
+        private ChaseState _chaseState;
+        private AttackState _attackState;
+        private Animator _animator;
+        private NavMeshAgent _navAgent;
 
-        [SerializeField] private bool _isInChaseRange;
-        [SerializeField] private bool _isInAttackRange;
+        [FormerlySerializedAs("_isInChaseRange")] [SerializeField] private bool isInChaseRange;
+        [FormerlySerializedAs("_isInAttackRange")] [SerializeField] private bool isInAttackRange;
         [SerializeField] private GameObject myTarget;
         [SerializeField] private GameObject currentTarget;
-        [SerializeField] private GameObject _currentEnemyEntity;
+        [FormerlySerializedAs("_currentEnemyEntity")] [SerializeField] private GameObject currentEnemyEntity;
 
-        [SerializeField] private string _searchForTag = "Player";
-        [SerializeField] private int _range = 3;
-        [SerializeField] private int _tetherRange = 5;
-        [SerializeField] private int _attackRange = 1;
-        [SerializeField] private int _attackDamage = 1;
-        [SerializeField] private Vector3 _startPosition;
-        private float velocity; //parameter for animator can't be written with an underscore, otherwise it won't work
+        [FormerlySerializedAs("_searchForTag")] [SerializeField] private string searchForTag = "Player";
+        [FormerlySerializedAs("_range")] [SerializeField] private int range = 3;
+        [FormerlySerializedAs("_tetherRange")] [SerializeField] private int tetherRange = 5;
+        [FormerlySerializedAs("_attackRange")] [SerializeField] private int attackRange = 1;
+        [FormerlySerializedAs("_attackDamage")] [SerializeField] private int attackDamage = 1;
+        [FormerlySerializedAs("_startPosition")] [SerializeField] private Vector3 startPosition;
+        private float _velocity; //parameter for animator can't be written with an underscore, otherwise it won't work
         private int _velocityHash;
         private float _coolDownTimer;
  
@@ -84,16 +85,16 @@ namespace StateManager
         {
             _velocityHash = Animator.StringToHash("velocity");
 
-            _startPosition = this.transform.position;
-            myTarget = GameObject.FindGameObjectWithTag(_searchForTag);
+            startPosition = this.transform.position;
+            myTarget = GameObject.FindGameObjectWithTag(searchForTag);
 
-            idleState = new IdleState();
-            chaseState = new ChaseState();
-            attackState = new AttackState();
-            currentState = idleState;
+            _idleState = new IdleState();
+            _chaseState = new ChaseState();
+            _attackState = new AttackState();
+            _currentState = _idleState;
 
-            NavAgent = GetComponent<NavMeshAgent>();
-            animator = GetComponentInChildren<Animator>();
+            _navAgent = GetComponent<NavMeshAgent>();
+            _animator = GetComponentInChildren<Animator>();
             InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
             InvokeRepeating("CheckDistanceBetweenEnemyAndPlayer", 0, 0.5f); //checks every 0.5 sec if the target is in _attackRange, if true sets bool IsInAttackRange, for attack state switch
 
@@ -111,14 +112,14 @@ namespace StateManager
             }
             else
             {
-                attackState.AttackIsReady = true;
+                _attackState.attackIsReady = true;
             }
         }
         #region Methods
 
         private void CheckDistanceBetweenEnemyAndPlayer()
         {
-            if (Vector3.Distance(myTarget.transform.position, this.transform.position) < _attackRange)
+            if (Vector3.Distance(myTarget.transform.position, this.transform.position) < attackRange)
             {
                 IsInAttackRange = true;
             }
@@ -131,33 +132,33 @@ namespace StateManager
 
         private void MovementAnimationOld() //sets NavAgent.velocity and updates float for blendtree
         {
-            if (NavAgent.velocity.x < 0)
+            if (_navAgent.velocity.x < 0)
             {
-                velocity = NavAgent.velocity.x * -1;
+                _velocity = _navAgent.velocity.x * -1;
             }
             else
             {
-                velocity = NavAgent.velocity.x;
+                _velocity = _navAgent.velocity.x;
             }
-            animator.SetFloat(_velocityHash, velocity);
+            _animator.SetFloat(_velocityHash, _velocity);
         }
         private void RunStateMachine() //checks for current state and switchs if nessesary
         {
-            State nextState = currentState?.ExecuteCurrentState(this); //null checks, if not null run current state. If it is null ignore it
+            State nextState = _currentState?.ExecuteCurrentState(this); //null checks, if not null run current state. If it is null ignore it
 
-            if (currentState is null)
+            if (_currentState is null)
             {
                 nextState = IdleState;
             }
-            if (currentState == chaseState && IsInAttackRange && IsInChaseRange)
+            if (_currentState == _chaseState && IsInAttackRange && IsInChaseRange)
             {
                 nextState = AttackState;
             }
-            if (currentState == chaseState && !IsInAttackRange && IsInChaseRange)
+            if (_currentState == _chaseState && !IsInAttackRange && IsInChaseRange)
             {
-                nextState = chaseState;
+                nextState = _chaseState;
             }
-            if (currentState == chaseState && !IsInAttackRange && !IsInChaseRange)
+            if (_currentState == _chaseState && !IsInAttackRange && !IsInChaseRange)
             {
                 nextState = IdleState;
             }
@@ -166,7 +167,7 @@ namespace StateManager
         }
         private void SwitchToNextState(State nextState)
         {
-            currentState = nextState;
+            _currentState = nextState;
         }
         public void TargetNullCheck() //follows target, unless it is null, returns to start position
         {
@@ -177,19 +178,19 @@ namespace StateManager
                     Debug.Log($"Current State is {CurrentState}");
                     if (currentTarget != null)
                     {
-                        NavAgent.destination = currentTarget.transform.position;
+                        _navAgent.destination = currentTarget.transform.position;
                     }
-                    else if (NavAgent.destination != _startPosition)
+                    else if (_navAgent.destination != startPosition)
                     {
-                        NavAgent.destination = _startPosition;
+                        _navAgent.destination = startPosition;
                     }
                 }
                 if (CurrentState is IdleState)
                 {
                     Debug.Log($"Current State is {CurrentState}");
-                    if (NavAgent.destination != _startPosition)
+                    if (_navAgent.destination != startPosition)
                     {
-                        NavAgent.destination = _startPosition;
+                        _navAgent.destination = startPosition;
                     }
                 }
                 if (CurrentState is AttackState)
@@ -201,12 +202,12 @@ namespace StateManager
         public void DistanceCheck() //checks if Target is in Range, if Target is out if range sets to null
         {
             float dist = Vector3.Distance(this.transform.position, myTarget.transform.position);
-            if (dist < _range)
+            if (dist < range)
             {
                 currentTarget = myTarget;
                 IsInChaseRange = true;
             }
-            else if (dist > _tetherRange)
+            else if (dist > tetherRange)
             {
                 currentTarget = null;
                 IsInChaseRange = false;
@@ -215,8 +216,8 @@ namespace StateManager
 
         private void MovementAnimation() //sets NavAgent.velocity and updates float for blendtree animations
         {
-            velocity = NavAgent.velocity.magnitude / NavAgent.speed;
-            animator.SetFloat(_velocityHash, velocity);
+            _velocity = _navAgent.velocity.magnitude / _navAgent.speed;
+            _animator.SetFloat(_velocityHash, _velocity);
         }
         #endregion
     }

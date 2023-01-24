@@ -8,14 +8,14 @@ namespace KI_Project
     {
         public Animator anim;
         public bool canRotate;
-        int vertical;
-        int horizontal;
+        int _vertical;
+        int _horizontal;
 
         public void Initialize()
         {
             anim = GetComponent<Animator>();
-            vertical = Animator.StringToHash("Vertical");
-            horizontal = Animator.StringToHash("Horizontal");
+            _vertical = Animator.StringToHash("Vertical");
+            _horizontal = Animator.StringToHash("Horizontal");
         }
 
         public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement)
@@ -69,8 +69,8 @@ namespace KI_Project
                 h = 0;
             }
             #endregion
-            anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
-            anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);
+            anim.SetFloat(_vertical, v, 0.1f, Time.deltaTime);
+            anim.SetFloat(_horizontal, h, 0.1f, Time.deltaTime);
         }
 
         public void CanRotate()
@@ -78,7 +78,7 @@ namespace KI_Project
             canRotate = true;
         }
 
-        public void stopRotation()
+        public void StopRotation()
         {
             canRotate = false;
         }

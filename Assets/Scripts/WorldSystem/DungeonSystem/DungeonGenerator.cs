@@ -2,39 +2,40 @@ using NUnit.Framework.Internal;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    [SerializeField] private int _level = 1;
-    [SerializeField][Range(2.6f, 5.0f)] private float _levlelMultiplier = 2.6f;
+    [FormerlySerializedAs("_level")] [SerializeField] private int level = 1;
+    [FormerlySerializedAs("_levlelMultiplier")] [SerializeField][Range(2.6f, 5.0f)] private float levlelMultiplier = 2.6f;
     private enum ERoomTypes
     {
-        empty = -1,
-        normal,
-        start
+        Empty = -1,
+        Normal,
+        Start
     }
-    private const int MAP_WIDTH = 9;
-    private const int MAP_HIGHT = 8;
-    ERoomTypes[,] map;
+    private const int MapWidth = 9;
+    private const int MapHight = 8;
+    ERoomTypes[,] _map;
 
     private void Awake()
     {
-        GenerateMap(_level);
-        Debug.LogWarning(LogMap(map));
+        GenerateMap(level);
+        Debug.LogWarning(LogMap(_map));
     }
 
-    private void GenerateMap(int _level)
+    private void GenerateMap(int level)
     {
-        map = new ERoomTypes[MAP_WIDTH, MAP_HIGHT];
+        _map = new ERoomTypes[MapWidth, MapHight];
 
-        for (int y = 0; y < MAP_HIGHT; y++)
+        for (int y = 0; y < MapHight; y++)
         {
-            for (int x = 0; x < MAP_WIDTH; x++)
+            for (int x = 0; x < MapWidth; x++)
             {
-                map[x, y] = ERoomTypes.empty; //sets all rooms to empty to be save, there is no error
+                _map[x, y] = ERoomTypes.Empty; //sets all rooms to empty to be save, there is no error
             }
         }
-        int neededRoomCount = Random.Range(0, 2) + 5 + (int)(_level * _levlelMultiplier);
+        int neededRoomCount = Random.Range(0, 2) + 5 + (int)(level * levlelMultiplier);
 
         int maxInterations = 3000;//prevents infinite loops
         int currentIterations = 0;
@@ -43,14 +44,14 @@ public class DungeonGenerator : MonoBehaviour
         while (!isMapValid && currentIterations < maxInterations)
         {
             //Generate new Level
-            ERoomTypes[,] mapToValidate = GenerateLevelToValidate(map, neededRoomCount); //tmp ERoomtype to modify for future usage
+            ERoomTypes[,] mapToValidate = GenerateLevelToValidate(_map, neededRoomCount); //tmp ERoomtype to modify for future usage
 
             //Validate new Level
             isMapValid = ValidateMap(mapToValidate, neededRoomCount);
             if (isMapValid)
             {
                 isMapValid = true;
-                map = mapToValidate;
+                _map = mapToValidate;
             }
             currentIterations++;
         }
@@ -59,15 +60,15 @@ public class DungeonGenerator : MonoBehaviour
         {
             Debug.LogError("Max Iterations reached");
         }
-        
+
 #endif
 
     }
-    private ERoomTypes[,] GenerateLevelToValidate(ERoomTypes[,] _baseLevel, int _numRoomsToGenerate)
+    private ERoomTypes[,] GenerateLevelToValidate(ERoomTypes[,] baseLevel, int numRoomsToGenerate)
     {
         Queue<Vector2Int> positionsToExpand = new Queue<Vector2Int>(); //coordinates of rooms
-        Vector2Int midPos = new Vector2Int(MAP_WIDTH / 2, MAP_HIGHT / 2); //middle of level
-        _baseLevel[midPos.x, midPos.y] = ERoomTypes.start;
+        Vector2Int midPos = new Vector2Int(MapWidth / 2, MapHight / 2); //middle of level
+        baseLevel[midPos.x, midPos.y] = ERoomTypes.Start;
         positionsToExpand.Enqueue(midPos);//addes midPos to Queue
         int currRoomCount = 1;
 
@@ -86,65 +87,65 @@ public class DungeonGenerator : MonoBehaviour
                 Vector2Int toCheck = positionsToCheck[checkPosIdx];
 
                 //check if in bounds
-                if (toCheck.x >= 0 && toCheck.x < MAP_WIDTH && toCheck.y >= 0 && toCheck.y < MAP_HIGHT) //checks if in bounds of array
+                if (toCheck.x >= 0 && toCheck.x < MapWidth && toCheck.y >= 0 && toCheck.y < MapHight) //checks if in bounds of array
                 {
                     //Rule 1: if enough rooms => continue to next room
-                    if (currRoomCount >= _numRoomsToGenerate) { continue; }
+                    if (currRoomCount >= numRoomsToGenerate) { continue; }
                     //Rule 2: if there is already a room => continue to next room
-                    if (_baseLevel[toCheck.x, toCheck.y] != ERoomTypes.empty) { continue; }
+                    if (baseLevel[toCheck.x, toCheck.y] != ERoomTypes.Empty) { continue; }
                     //Rule 3: coinflip rnd chance to skip room => continue to next room
                     float rndPercent = Random.Range(0f, 1f);
                     if (rndPercent <= 0.5f) { continue; }
 
                     //Rule 4: if more than one neihgbour room is at position => continue to next Room
-                    int neighbourCount = GetNeighbourCount(_baseLevel, toCheck);
+                    int neighbourCount = GetNeighbourCount(baseLevel, toCheck);
                     if (neighbourCount < 1) { continue; }
 
                     //Generate Room
 
-                    _baseLevel[toCheck.x, toCheck.y] = ERoomTypes.normal;
+                    baseLevel[toCheck.x, toCheck.y] = ERoomTypes.Normal;
                     positionsToExpand.Enqueue(toCheck);
                     currRoomCount++;
                 }
             }
         }
 
-        return _baseLevel;
+        return baseLevel;
     }
-    private bool ValidateMap(ERoomTypes[,] _levelToValidate, int _neededRoomCount)
+    private bool ValidateMap(ERoomTypes[,] levelToValidate, int neededRoomCount)
     {
         int count = 0;
-        for (int y = 0; y < MAP_HIGHT; y++)
+        for (int y = 0; y < MapHight; y++)
         {
-            for (int x = 0; x < MAP_WIDTH; x++)
+            for (int x = 0; x < MapWidth; x++)
             {
-                if (_levelToValidate[x, y] != ERoomTypes.empty)
+                if (levelToValidate[x, y] != ERoomTypes.Empty)
                 {
                     count++;
                 }
             }
         }
-        return count >= _neededRoomCount;//even if more rooms were created than needed, the map is still valid
+        return count >= neededRoomCount;//even if more rooms were created than needed, the map is still valid
     }
-    private int GetNeighbourCount(ERoomTypes[,] _level, Vector2Int _positionToCheck)
+    private int GetNeighbourCount(ERoomTypes[,] level, Vector2Int positionToCheck)
     {
         int count = 0;
 
         Vector2Int[] positionsToCheck = new Vector2Int[]
         {
-            _positionToCheck + Vector2Int.up,
-            _positionToCheck + Vector2Int.right,
-            _positionToCheck + Vector2Int.down,
-            _positionToCheck + Vector2Int.left
+            positionToCheck + Vector2Int.up,
+            positionToCheck + Vector2Int.right,
+            positionToCheck + Vector2Int.down,
+            positionToCheck + Vector2Int.left
         };
 
         for (int neighbourPosIdx = 0; neighbourPosIdx < positionsToCheck.Length; neighbourPosIdx++)
         {
             Vector2Int toCheck = positionsToCheck[neighbourPosIdx];
 
-            if (toCheck.x >= 0 && toCheck.x < MAP_WIDTH && toCheck.y >= 0 && toCheck.y < MAP_HIGHT)
+            if (toCheck.x >= 0 && toCheck.x < MapWidth && toCheck.y >= 0 && toCheck.y < MapHight)
             {
-                if (_level[toCheck.x, toCheck.y] != ERoomTypes.empty)
+                if (level[toCheck.x, toCheck.y] != ERoomTypes.Empty)
                 {
                     count++;
                 }
@@ -155,10 +156,10 @@ public class DungeonGenerator : MonoBehaviour
     }
 
 
-    private string LogMap(ERoomTypes[,] _map) //generate a output string, to better see roomtypes
+    private string LogMap(ERoomTypes[,] map) //generate a output string, to better see roomtypes
     {
-        int mapWidth = _map.GetLength(0);
-        int mapHeight = _map.GetLength(1);
+        int mapWidth = map.GetLength(0);
+        int mapHeight = map.GetLength(1);
 
         string output = "";
         for (int y = 0; y < mapHeight; y++)
@@ -166,7 +167,7 @@ public class DungeonGenerator : MonoBehaviour
             output += "|";
             for (int x = 0; x < mapWidth; x++)
             {
-                int num = (int)_map[x, y];
+                int num = (int)map[x, y];
                 if (num >= 0)
                 {
                     output += " ";

@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class OptionsScreen : MonoBehaviour
 {
-    public Toggle FullscreenToggle;
-    public Toggle VsyncToggle;
-    public TMP_Text ResolutionText;
-    public List<ResItem> Resolutions = new List<ResItem>();
-    private int selectedRes;
+    [FormerlySerializedAs("FullscreenToggle")] public Toggle fullscreenToggle;
+    [FormerlySerializedAs("VsyncToggle")] public Toggle vsyncToggle;
+    [FormerlySerializedAs("ResolutionText")] public TMP_Text resolutionText;
+    [FormerlySerializedAs("Resolutions")] public List<ResItem> resolutions = new List<ResItem>();
+    private int _selectedRes;
     
     
 
     private void Start()
     {
-        FullscreenToggle.isOn = Screen.fullScreen;
+        fullscreenToggle.isOn = Screen.fullScreen;
         if (QualitySettings.vSyncCount == 0)
         {
-            VsyncToggle.isOn = false;
+            vsyncToggle.isOn = false;
         }
         else
         {
-            VsyncToggle.isOn = true;
+            vsyncToggle.isOn = true;
         }
         bool foundRes = false;
-        for (int i = 0; i < Resolutions.Count; i++)
+        for (int i = 0; i < resolutions.Count; i++)
         {
-            if (Resolutions[i].Width == Screen.width && Resolutions[i].Height == Screen.height)
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
             {
                 
-                selectedRes = i;
+                _selectedRes = i;
                 foundRes = true;
                 UpdateResolutionLabel();
             }
@@ -39,39 +40,39 @@ public class OptionsScreen : MonoBehaviour
         if (!foundRes)
         {
             ResItem newRes = new ResItem();
-            newRes.Width = Screen.width;
-            newRes.Height = Screen.height;
-            Resolutions.Add(newRes);
-            selectedRes = Resolutions.Count - 1;
+            newRes.width = Screen.width;
+            newRes.height = Screen.height;
+            resolutions.Add(newRes);
+            _selectedRes = resolutions.Count - 1;
             UpdateResolutionLabel();
         }
     }
     public void ResLeft()
     {
-        selectedRes--;
-        if (selectedRes < 0)
+        _selectedRes--;
+        if (_selectedRes < 0)
         {
-            selectedRes = 0;
+            _selectedRes = 0;
         }
         UpdateResolutionLabel();
     }
     public void ResRight() 
     {
-        selectedRes++;
-        if (selectedRes > Resolutions.Count - 1)
+        _selectedRes++;
+        if (_selectedRes > resolutions.Count - 1)
         {
-            selectedRes = Resolutions.Count - 1;
+            _selectedRes = resolutions.Count - 1;
         }
         UpdateResolutionLabel();
 
     }
     public void UpdateResolutionLabel() 
     {
-        ResolutionText.text = Resolutions[selectedRes].Width.ToString() + " x " + Resolutions[selectedRes].Height.ToString();
+        resolutionText.text = resolutions[_selectedRes].width.ToString() + " x " + resolutions[_selectedRes].height.ToString();
     }
         public void ApplyGraphic()
         {
-            if (VsyncToggle.isOn)
+            if (vsyncToggle.isOn)
             {
                 QualitySettings.vSyncCount = 1;
             }
@@ -80,7 +81,7 @@ public class OptionsScreen : MonoBehaviour
                 QualitySettings.vSyncCount = 0;
             }
 
-        Screen.SetResolution(Resolutions[selectedRes].Width, Resolutions[selectedRes].Height, FullscreenToggle.isOn);
+        Screen.SetResolution(resolutions[_selectedRes].width, resolutions[_selectedRes].height, fullscreenToggle.isOn);
         }
 
     
@@ -88,6 +89,6 @@ public class OptionsScreen : MonoBehaviour
 [System.Serializable]
 public class ResItem {
 
-    public int Width;
-    public int Height;
+    [FormerlySerializedAs("Width")] public int width;
+    [FormerlySerializedAs("Height")] public int height;
 }
