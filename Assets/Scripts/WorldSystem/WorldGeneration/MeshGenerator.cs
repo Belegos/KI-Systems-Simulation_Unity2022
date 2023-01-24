@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve heightCurve, int levelOfDetail)
     {
-        AnimationCurve heightCurveThreaded = new AnimationCurve(_heightCurve.keys);//prevent AnimationCurve from returning wrong values, each Thread got his own heightCurve
+        AnimationCurve heightCurveThreaded = new AnimationCurve(heightCurve.keys);//prevent AnimationCurve from returning wrong values, each Thread got his own heightCurve
         int borderedSize = heightMap.GetLength(0);
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
         int meshSize = borderedSize - 2 * meshSimplificationIncrement;
@@ -74,35 +74,35 @@ public static class MeshGenerator
 }
 public class MeshData
 {
-    private Vector3[] vertices;
-    private int[] triangles;
-    private Vector2[] uvs;
+    private Vector3[] _vertices;
+    private int[] _triangles;
+    private Vector2[] _uvs;
 
-    private Vector3[] borderVerticies;
-    private int[] borderTriangles;
+    private Vector3[] _borderVerticies;
+    private int[] _borderTriangles;
 
-    private int triangleIndex;
-    private int borderTriangleIndex;
+    private int _triangleIndex;
+    private int _borderTriangleIndex;
 
     public MeshData(int verticesPerLine)
     {
-        vertices = new Vector3[verticesPerLine * verticesPerLine];
-        uvs = new Vector2[verticesPerLine * verticesPerLine];
-        triangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
+        _vertices = new Vector3[verticesPerLine * verticesPerLine];
+        _uvs = new Vector2[verticesPerLine * verticesPerLine];
+        _triangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
 
-        borderVerticies = new Vector3[verticesPerLine * 4 + 4];//multiplyed by 4 because we have 4 borders, 4 for each corner
-        borderTriangles = new int[24 * verticesPerLine];//24 for all triangles
+        _borderVerticies = new Vector3[verticesPerLine * 4 + 4];//multiplyed by 4 because we have 4 borders, 4 for each corner
+        _borderTriangles = new int[24 * verticesPerLine];//24 for all triangles
     }
     public void AddVertex(Vector3 vertexPosition, Vector2 uv, int vertexIndex)
     {
         if (vertexIndex < 0)
         {
-            borderVerticies[-vertexIndex - 1] = vertexPosition;
+            _borderVerticies[-vertexIndex - 1] = vertexPosition;
         }
         else //if the verticies or uvs greater than 0, they are no borderPositions wich are not part of actuall mesh
         {
-            vertices[vertexIndex] = vertexPosition;
-            uvs[vertexIndex] = uv;
+            _vertices[vertexIndex] = vertexPosition;
+            _uvs[vertexIndex] = uv;
         }
     }
     /// <summary>
@@ -118,17 +118,17 @@ public class MeshData
     {
         if (a < 0 || b < 0 || c < 0)
         {
-            borderTriangles[borderTriangleIndex] = a;
-            borderTriangles[borderTriangleIndex + 1] = b;
-            borderTriangles[borderTriangleIndex + 2] = c;
-            borderTriangleIndex += 3;
+            _borderTriangles[_borderTriangleIndex] = a;
+            _borderTriangles[_borderTriangleIndex + 1] = b;
+            _borderTriangles[_borderTriangleIndex + 2] = c;
+            _borderTriangleIndex += 3;
         }
         else
         {
-            triangles[triangleIndex] = a;
-            triangles[triangleIndex + 1] = b;
-            triangles[triangleIndex + 2] = c;
-            triangleIndex += 3;
+            _triangles[_triangleIndex] = a;
+            _triangles[_triangleIndex + 1] = b;
+            _triangles[_triangleIndex + 2] = c;
+            _triangleIndex += 3;
         }
     }
 
@@ -139,27 +139,27 @@ public class MeshData
     /// <returns></returns>
     Vector3[] CalculateNormals()
     {
-        Vector3[] vertexNormals = new Vector3[vertices.Length];
-        int triangleCount = triangles.Length / 3;
+        Vector3[] vertexNormals = new Vector3[_vertices.Length];
+        int triangleCount = _triangles.Length / 3;
         for (int i = 0; i < triangleCount; i++)
         {
             int normalTriangleIndex = i * 3; //index of the triangle in the array
-            int vertexIndexA = triangles[normalTriangleIndex];
-            int vertexIndexB = triangles[normalTriangleIndex + 1];
-            int vertexIndexC = triangles[normalTriangleIndex + 2];
+            int vertexIndexA = _triangles[normalTriangleIndex];
+            int vertexIndexB = _triangles[normalTriangleIndex + 1];
+            int vertexIndexC = _triangles[normalTriangleIndex + 2];
 
             Vector3 triangleNormal = SurfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
             vertexNormals[vertexIndexA] += triangleNormal;
             vertexNormals[vertexIndexB] += triangleNormal;
             vertexNormals[vertexIndexC] += triangleNormal;
         }
-        int borderTriangleCount = borderTriangles.Length / 3;
+        int borderTriangleCount = _borderTriangles.Length / 3;
         for (int j = 0; j < borderTriangleCount; j++)
         {
             int normalTriangleIndex = j * 3; //index of the triangle in the array
-            int vertexIndexA = borderTriangles[normalTriangleIndex];
-            int vertexIndexB = borderTriangles[normalTriangleIndex + 1];
-            int vertexIndexC = borderTriangles[normalTriangleIndex + 2];
+            int vertexIndexA = _borderTriangles[normalTriangleIndex];
+            int vertexIndexB = _borderTriangles[normalTriangleIndex + 1];
+            int vertexIndexC = _borderTriangles[normalTriangleIndex + 2];
 
             Vector3 triangleNormal = SurfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
             if (vertexIndexA >= 0)
@@ -193,21 +193,21 @@ public class MeshData
     /// <returns></returns>
     Vector3 SurfaceNormalFromIndices(int indexA, int indexB, int indexC)
     {
-        Vector3 pointA = (indexA < 0) ? borderVerticies[-indexA - 1] : vertices[indexA];
-        Vector3 pointB = (indexB < 0) ? borderVerticies[-indexB - 1] : vertices[indexB];
-        Vector3 pointC = (indexC < 0) ? borderVerticies[-indexC - 1] : vertices[indexC];
+        Vector3 pointA = (indexA < 0) ? _borderVerticies[-indexA - 1] : _vertices[indexA];
+        Vector3 pointB = (indexB < 0) ? _borderVerticies[-indexB - 1] : _vertices[indexB];
+        Vector3 pointC = (indexC < 0) ? _borderVerticies[-indexC - 1] : _vertices[indexC];
 
-        Vector3 sideAB = pointB - pointA;
-        Vector3 sideAC = pointC - pointA;
-        return Vector3.Cross(sideAB, sideAC).normalized;
+        Vector3 sideAb = pointB - pointA;
+        Vector3 sideAc = pointC - pointA;
+        return Vector3.Cross(sideAb, sideAc).normalized;
     }
 
     public Mesh CreateMesh()
     {
         Mesh mesh = new Mesh();
-        mesh.vertices = vertices; //equals to vertices array
-        mesh.triangles = triangles; //equals to triangles array
-        mesh.uv = uvs; //equals to uvs array
+        mesh.vertices = _vertices; //equals to vertices array
+        mesh.triangles = _triangles; //equals to triangles array
+        mesh.uv = _uvs; //equals to uvs array
         mesh.normals = CalculateNormals();
         return mesh;
     }

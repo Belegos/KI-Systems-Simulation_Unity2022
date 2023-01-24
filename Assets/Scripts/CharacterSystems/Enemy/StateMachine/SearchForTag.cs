@@ -1,6 +1,6 @@
 ﻿namespace StateManager
 {
-    public interface SearchForTag
+    public interface ISearchForTag
     {
     }
 }

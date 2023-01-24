@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] HealthBarScript _healthBar;
+    [FormerlySerializedAs("_healthBar")] [SerializeField] HealthBarScript healthBar;
     public static GameManager _gameManager 
     {
         get;
         private set;
     }
 
-    public UnitHealth _playerHealth = new UnitHealth(100,100);
+    public UnitHealth PlayerHealth = new UnitHealth(100,100);
 
     void Awake()
     {
@@ -28,13 +29,13 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-            _healthBar.SetMaxHealth(_playerHealth.MaxHealth);
-            _healthBar.SetHealth(_playerHealth.Health);
+            healthBar.SetMaxHealth(PlayerHealth.MaxHealth);
+            healthBar.SetHealth(PlayerHealth.Health);
     }
 
     public void UpdateHealthBar(int newCurrentHealth)
     {
-        _healthBar.SetHealth(newCurrentHealth);
+        healthBar.SetHealth(newCurrentHealth);
     }
 
 
