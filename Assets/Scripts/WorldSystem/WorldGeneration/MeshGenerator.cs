@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class MeshGenerator
@@ -10,10 +8,10 @@ public static class MeshGenerator
         int borderedSize = heightMap.GetLength(0);
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
         int meshSize = borderedSize - 2 * meshSimplificationIncrement;
-        int meshSizeUnsimplefied = borderedSize - 2;
-        //meshSizeUnsimplefied so the LODVersions will not change in Size when used for topLeftX&Y
-        float topLeftX = (meshSizeUnsimplefied - 1) / -2f;
-        float topLeftZ = (meshSizeUnsimplefied - 1) / 2f;
+        int meshSizeUnsimplified = borderedSize - 2;
+        //meshSizeUnsimplified so the LODVersions will not change in Size when used for topLeftX&Y
+        float topLeftX = (meshSizeUnsimplified - 1) / -2f;
+        float topLeftZ = (meshSizeUnsimplified - 1) / 2f;
 
         //handles increament of the mesh simplification(LOD), if editorPreviewLOD is 0, then it is 1, else it is editorPreviewLOD * 2
         int verticesPerLine = (meshSize - 1) / meshSimplificationIncrement + 1;
@@ -51,7 +49,7 @@ public static class MeshGenerator
 
                 #region lock the heightCurve to stop threads form multithreading
                 //lock (heightCurve){
-                Vector3 vertexPosition = new Vector3(topLeftX + percent.x * meshSizeUnsimplefied, height, topLeftZ - percent.y * meshSizeUnsimplefied); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
+                Vector3 vertexPosition = new Vector3(topLeftX + percent.x * meshSizeUnsimplified, height, topLeftZ - percent.y * meshSizeUnsimplified); //x = x-coordinate, y = coordinate of the heightMap, z = y-coordinate
                 #endregion
 
                 meshData.AddVertex(vertexPosition, percent, vertexIndex);
@@ -108,8 +106,8 @@ public class MeshData
     /// <summary>
     /// Adds an triangle to the mesh
     /// if a,b or c are smaller than 0
-    /// they belong to the borders, wich are not part
-    /// of the actuall mesh but are nessescary for the endless terrain seamlessly blending
+    /// they belong to the borders, which are not part
+    /// of the actual mesh but are necessary for the endless terrain seamlessly blending
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>

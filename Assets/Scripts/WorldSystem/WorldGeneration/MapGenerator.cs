@@ -13,11 +13,11 @@ public class MapGenerator : MonoBehaviour
     public const int MapChunkSize = 239;//239^2 is the max size of a mesh, can have "LODs" of i=2,4,6,8,10,12
 
     [Range(0, 6)]
-    public int editorPreviewLOD;//incement of LevelDetail
+    public int editorPreviewLOD;//increment of LevelDetail
     public float noiseScale;
 
     public int octaves;
-    [Range(0, 1)] public float persistance;
+    [Range(0, 1)] public float persistence;
     public float lacunarity;
 
     public int seed;
@@ -83,7 +83,7 @@ public class MapGenerator : MonoBehaviour
 
     private MapData GenerateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistance, lacunarity, center + offset, normalizeMode);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
         //mapChunkSize + 2 because of the border to compensate
 
         Color[] colorMap = new Color[MapChunkSize * MapChunkSize];
@@ -181,7 +181,7 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    public struct MapData //stores the Data for the Map (heightMap and colorMap) for usage in other methodes
+    public struct MapData //stores the Data for the Map (heightMap and colorMap) for usage in other methods
     {
         public readonly float[,] HeightMap;
         public readonly Color[] ColorMap;
