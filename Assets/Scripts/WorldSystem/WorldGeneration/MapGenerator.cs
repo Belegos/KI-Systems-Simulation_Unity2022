@@ -13,7 +13,7 @@ public class MapGenerator : MonoBehaviour
     public const int MapChunkSize = 239;//239^2 is the max size of a mesh, can have "LODs" of i=2,4,6,8,10,12
 
     [Range(0, 6)]
-    public int editorPreviewLOD;//increment of LevelDetail
+    public int editorPreviewLOD;//increment of Level Of Detail
     public float noiseScale;
 
     public int octaves;
@@ -198,6 +198,7 @@ public class MapGenerator : MonoBehaviour
         public string name;
         public float height;
         public Color color;
+        public Shader Shader;
     }
     #endregion
 }
