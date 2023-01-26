@@ -198,6 +198,7 @@ public class MapGenerator : MonoBehaviour
         public string name;
         public float height;
         public Color color;
+        public Shader Shader;
     }
     #endregion
 }
