@@ -5,9 +5,9 @@ using static MapGenerator;
 public class EndlessTerrain : MonoBehaviour
 {
     public LODInfo[] detailLevels;
-    const float Scale = 1f; //scales whole map
-    const float ViewerMoveForUpdate = 25f;
-    const float SqrviewerMoveForUpdate = ViewerMoveForUpdate * ViewerMoveForUpdate;
+    private const float scale = 10f; //scales whole map
+    private const float ViewerMoveForUpdate = 25f;
+    private const float SqrviewerMoveForUpdate = ViewerMoveForUpdate * ViewerMoveForUpdate;
     public static float MaxViewDst;
     public Transform viewer;
     public Material mapMaterial;
@@ -33,7 +33,7 @@ public class EndlessTerrain : MonoBehaviour
     }
     private void Update()
     {
-        ViewerPosition = new Vector2(viewer.position.x, viewer.position.z) / Scale;
+        ViewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
 
         if ((_viewerPositionOld - ViewerPosition).sqrMagnitude > SqrviewerMoveForUpdate) //threshold to stop chunks updating every frame
         {
@@ -101,9 +101,9 @@ public class EndlessTerrain : MonoBehaviour
             _meshCollider = _meshObject.AddComponent<MeshCollider>();
             _meshRenderer.material = material;
 
-            _meshObject.transform.position = positionV3 * Scale;
+            _meshObject.transform.position = positionV3 * scale;
             _meshObject.transform.parent = parent;
-            _meshObject.transform.localScale = Vector3.one * Scale;
+            _meshObject.transform.localScale = Vector3.one * scale;
             SetVisible(false);
 
             _lodMeshes = new LODMesh[detailLevels.Length];
