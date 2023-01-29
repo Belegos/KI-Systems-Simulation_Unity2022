@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
-using UnityEditor.ShaderGraph;
-using UnityEngine.Rendering;
-using UnityEditor.ShaderGraph.Internal;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -31,6 +27,7 @@ public class MapGenerator : MonoBehaviour
     public bool autoUpdate;
     public bool enableThreading;
     public Shader shader;
+
 
     public TerrainTypes[] regions;
     public float[,] FalloffMap;
@@ -145,6 +142,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
         _texture.Apply();
+        
         _endlessTerrain.MapShaderMaterial = new Material(shader);
     }
 
