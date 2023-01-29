@@ -45,6 +45,7 @@ public class MapGenerator : MonoBehaviour
     {
         _endlessTerrain = FindObjectOfType<EndlessTerrain>();
         _texture = Resources.Load("Visuals/Material/WorldGeneration/Material/NoiseMap") as Texture2D;
+        GenerateNoiseTexture2D(_texture);
         FalloffMap = FalloffGenerator.GenerateFalloffMap(MapChunkSize);
     }
 
@@ -140,7 +141,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < noiseMap.GetLength(1); y++)
             {
-                _texture.SetPixel(x, y, new Color(1f,1f,1f,1f));
+                _texture.SetPixel(x, y, Color.Lerp(Color.black, Color.white, noiseMap[x, y]));
             }
         }
         _texture.Apply();
