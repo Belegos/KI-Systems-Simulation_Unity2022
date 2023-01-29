@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using JetBrains.Annotations;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class MapGenerator : MonoBehaviour
     public AnimationCurve meshHeightCurve;
     public bool useFalloffMap;
     public bool autoUpdate;
+    public Shader shader;
+    public Renderer rend;
 
     public TerrainTypes[] regions;
     public float[,] FalloffMap;
@@ -37,7 +40,9 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
+        rend = GetComponent<Renderer>();
         _texture = Resources.Load("Visuals/Material/WorldGeneration/Material/NoiseMap") as Texture2D;
+        //_texture = new Texture2D(MapChunkSize+2, MapChunkSize+2);
         FalloffMap = FalloffGenerator.GenerateFalloffMap(MapChunkSize);
     }
 
@@ -59,6 +64,7 @@ public class MapGenerator : MonoBehaviour
                 threadInfo.Callback(threadInfo.Parameter);
             }
         }
+        GenerateNoiseTexture2D(_texture);
     }
 
     public void DrawMapInEditor()
@@ -86,7 +92,7 @@ public class MapGenerator : MonoBehaviour
 
     private MapData GenerateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode,_texture);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
         //mapChunkSize + 2 because of the border to compensate
 
         Color[] colorMap = new Color[MapChunkSize * MapChunkSize];
@@ -116,6 +122,25 @@ public class MapGenerator : MonoBehaviour
 
         return new MapData(noiseMap, colorMap);
     }
+
+    private void GenerateNoiseTexture2D(Texture2D _texture)
+    {
+        Vector2 center = Vector2.zero;
+        //gets the values of the noiseMap and sets the pixels of the texture to the values of the noiseMap for usage in shaders
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
+        _texture = new Texture2D(noiseMap.GetLength(0), noiseMap.GetLength(1));
+        for (int x = 0; x < noiseMap.GetLength(0); x++)
+            {
+                for (int y = 0; y < noiseMap.GetLength(1); y++)
+                {
+                    _texture.SetPixel(x, y, new Color(noiseMap[x, y], noiseMap[x, y], noiseMap[x, y]));
+                }
+            }
+        _texture.Apply();
+        rend.material = new Material(shader);
+        rend.material.mainTexture = _texture;
+    }
+
     private void OnValidate()
     {
         if (lacunarity < 1)
@@ -194,7 +219,6 @@ public class MapGenerator : MonoBehaviour
         {
             this.HeightMap = heightMap;
             this.ColorMap = colorMap;
-            //this.Texture = texture;
         }
     }
     [System.Serializable]
