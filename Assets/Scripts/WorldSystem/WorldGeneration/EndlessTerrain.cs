@@ -10,7 +10,7 @@ public class EndlessTerrain : MonoBehaviour
     private const float SqrviewerMoveForUpdate = ViewerMoveForUpdate * ViewerMoveForUpdate;
     public static float MaxViewDst;
     public Transform viewer;
-    public Material mapShaderMaterial;
+    [SerializeField]private Material mapShaderMaterial;
     public Material mapColorMaterial;
     private Material _mapMaterial;
 
@@ -27,6 +27,7 @@ public class EndlessTerrain : MonoBehaviour
         get { return _mapMaterial; }
     }
 
+    public Material MapShaderMaterial { get => mapShaderMaterial; set => mapShaderMaterial = value; }
 
     Dictionary<Vector2, TerrainChunk> _terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();//stores all visited MapChunks
     static List<TerrainChunk> _terrainChunkVisibleLastUpdate = new List<TerrainChunk>();
@@ -39,7 +40,7 @@ public class EndlessTerrain : MonoBehaviour
         }
         if (enableShaderMaterial) 
         {
-            _mapMaterial = mapShaderMaterial;
+            _mapMaterial = MapShaderMaterial;
         }
     }
     private void Start()

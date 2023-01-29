@@ -94,18 +94,6 @@ public static class Noise
                 }
             }
         }
-        #region SetTexturePixelsForShader
-        //gets the values of the noiseMap and sets the pixels of the texture to the values of the noiseMap for usage in shaders
-        //texture = (noiseMap.GetLength(0), noiseMap.GetLength(1));
-        //for (int x = 0; x < mapWidth; x++)
-        //{
-        //    for (int y = 0; y < mapHeight; y++)
-        //    {
-        //        texture.SetPixel(x, y, new Color(noiseMap[x, y], noiseMap[x, y], noiseMap[x, y]));
-        //    }
-        //}
-        //texture.Apply();
-        #endregion
 
         return noiseMap;
     }
