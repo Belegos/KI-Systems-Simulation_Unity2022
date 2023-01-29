@@ -5,22 +5,43 @@ using static MapGenerator;
 public class EndlessTerrain : MonoBehaviour
 {
     public LODInfo[] detailLevels;
-    private const float scale = 10f; //scales whole map
+    private const float scale = 4f; //scales whole map
     private const float ViewerMoveForUpdate = 25f;
     private const float SqrviewerMoveForUpdate = ViewerMoveForUpdate * ViewerMoveForUpdate;
     public static float MaxViewDst;
     public Transform viewer;
-    public Material mapMaterial;
+    public Material mapShaderMaterial;
+    public Material mapColorMaterial;
+    private Material _mapMaterial;
 
     public static Vector2 ViewerPosition;
     private Vector2 _viewerPositionOld;
     static MapGenerator _mapGenerator;
     private int _chunkSize;
     private int _chunksVisibleInViewDst;
+    public bool enableShaderMaterial = false;
+    private bool prevBool;
+
+    public Material mapMaterial
+    {
+        get { return _mapMaterial; }
+    }
+
 
     Dictionary<Vector2, TerrainChunk> _terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();//stores all visited MapChunks
     static List<TerrainChunk> _terrainChunkVisibleLastUpdate = new List<TerrainChunk>();
-
+    private void OnEnable()
+    {
+        prevBool = enableShaderMaterial;
+        if (!enableShaderMaterial) 
+        {
+            _mapMaterial = mapColorMaterial;
+        }
+        if (enableShaderMaterial) 
+        {
+            _mapMaterial = mapShaderMaterial;
+        }
+    }
     private void Start()
     {
         _mapGenerator = FindObjectOfType<MapGenerator>();
@@ -34,7 +55,11 @@ public class EndlessTerrain : MonoBehaviour
     private void Update()
     {
         ViewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
-
+        if (enableShaderMaterial != prevBool) 
+        {
+            prevBool = !prevBool;
+            UpdateVisableChunks();
+        }
         if ((_viewerPositionOld - ViewerPosition).sqrMagnitude > SqrviewerMoveForUpdate) //threshold to stop chunks updating every frame
         {
             _viewerPositionOld = ViewerPosition;
@@ -65,7 +90,7 @@ public class EndlessTerrain : MonoBehaviour
                 }
                 else
                 {
-                    _terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, _chunkSize, detailLevels, transform, mapMaterial));
+                    _terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, _chunkSize, detailLevels, transform, _mapMaterial));
                 }
             }
 

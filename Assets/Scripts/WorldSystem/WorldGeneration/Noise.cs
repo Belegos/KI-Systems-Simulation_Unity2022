@@ -12,9 +12,12 @@ using UnityEngine;
 public static class Noise
 {
     public enum NormalizeMode { SingleMode, EndlessMode };
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode) // Generates a 2D array of floats for a noise map
+        
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, Texture2D texture) // Generates a 2D array of floats for a noise map
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
+        //Texture2D texture = Resources.Load("Visuals/Material/WorldGeneration/Material/NoiseMap") as Texture2D;
+        texture = new Texture2D(mapWidth, mapHeight);
 
         #region SeedRandomInV2Array
         System.Random prng = new System.Random(seed);
@@ -93,7 +96,20 @@ public static class Noise
                 }
             }
         }
+        #region SetTexturePixelsForShader
+        //gets the values of the noiseMap and sets the pixels of the texture to the values of the noiseMap for usage in shaders
+        texture = new Texture2D(noiseMap.GetLength(0), noiseMap.GetLength(1));
+        for (int x = 0; x < texture.width; x++)
+        {
+            for (int y = 0; y < texture.height; y++)
+            {
+                texture.SetPixel(x, y, new Color(noiseMap[x, y], noiseMap[x, y], noiseMap[x, y]));
+            }
+        }
+        texture.Apply();
+        #endregion
 
         return noiseMap;
     }
+
 }

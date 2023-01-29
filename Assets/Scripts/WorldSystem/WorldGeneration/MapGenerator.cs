@@ -30,11 +30,14 @@ public class MapGenerator : MonoBehaviour
     public TerrainTypes[] regions;
     public float[,] FalloffMap;
 
+    private Texture2D _texture;
+
     Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
 
     private void Awake()
     {
+        _texture = Resources.Load("Visuals/Material/WorldGeneration/Material/NoiseMap") as Texture2D;
         FalloffMap = FalloffGenerator.GenerateFalloffMap(MapChunkSize);
     }
 
@@ -83,7 +86,7 @@ public class MapGenerator : MonoBehaviour
 
     private MapData GenerateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode,_texture);
         //mapChunkSize + 2 because of the border to compensate
 
         Color[] colorMap = new Color[MapChunkSize * MapChunkSize];
@@ -185,11 +188,13 @@ public class MapGenerator : MonoBehaviour
     {
         public readonly float[,] HeightMap;
         public readonly Color[] ColorMap;
+        //public readonly Texture2D Texture;
 
         public MapData(float[,] heightMap, Color[] colorMap)
         {
             this.HeightMap = heightMap;
             this.ColorMap = colorMap;
+            //this.Texture = texture;
         }
     }
     [System.Serializable]
@@ -198,7 +203,6 @@ public class MapGenerator : MonoBehaviour
         public string name;
         public float height;
         public Color color;
-        public Shader Shader;
     }
     #endregion
 }
