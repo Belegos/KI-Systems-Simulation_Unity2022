@@ -35,7 +35,7 @@ public class MapGenerator : MonoBehaviour
     public TerrainTypes[] regions;
     public float[,] FalloffMap;
 
-    private Texture2D _texture;
+    [SerializeField] private Texture2D _texture;
     private EndlessTerrain _endlessTerrain;
 
     Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
@@ -140,7 +140,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < noiseMap.GetLength(1); y++)
             {
-                _texture.SetPixel(x, y, new Color(noiseMap[x, y], noiseMap[x, y], noiseMap[x, y]));
+                _texture.SetPixel(x, y, new Color(1f,1f,1f,1f));
             }
         }
         _texture.Apply();
