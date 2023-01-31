@@ -175,7 +175,6 @@ namespace StateManager
             {
                 if (CurrentState is ChaseState)
                 {
-                    Debug.Log($"Current State is {CurrentState}");
                     if (currentTarget != null)
                     {
                         _navAgent.destination = currentTarget.transform.position;
@@ -187,15 +186,10 @@ namespace StateManager
                 }
                 if (CurrentState is IdleState)
                 {
-                    Debug.Log($"Current State is {CurrentState}");
                     if (_navAgent.destination != startPosition)
                     {
                         _navAgent.destination = startPosition;
                     }
-                }
-                if (CurrentState is AttackState)
-                {
-                    Debug.Log($"Current State is: {CurrentState}");
                 }
             }
         }
