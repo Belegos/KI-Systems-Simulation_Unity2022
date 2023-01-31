@@ -58,7 +58,16 @@ public class SimplePrefabSpawner : EditorWindow
             }
             if (randomizePosition) // If the randomizePosition is true, randomize the position
             {
-                spawnedObject.transform.position = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
+                Vector3 newPosition = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
+                Collider[] overlappingObjects = Physics.OverlapSphere(newPosition, spawnedObject.GetComponent<Collider>().bounds.size.magnitude);
+                if (overlappingObjects.Length == 0) // check if there are no other objects at the random position
+                {
+                    spawnedObject.transform.position = newPosition;
+                }
+                else // if there are other objects at the random position, try again
+                {
+                    i--;
+                }
             }
         }
     }
