@@ -10,7 +10,7 @@ public class SimplePrefabSpawner : EditorWindow
     private Vector3 spawnRotation = Vector3.zero;
     private Vector3 spawnScale = Vector3.one;
 
-    [SerializeField]private bool randomizeYRotation = false;
+    private bool randomizeYRotation = false;
     private bool randomizeScale = false;
     private bool randomizePosition = false;
 
