@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ public class SimplePrefabSpawner : EditorWindow
     }
     private void SpawnObjects(bool randomizeYRotation, bool randomizeScale = false, bool randomizePosition = false)
     {
+        Collider[] SimpleColliderObj = new Collider[256]; //stores nonAlloc objects
         for (int i = 0; i < objectCount; i++)
         {
             GameObject spawnedObject = PrefabUtility.InstantiatePrefab(objectToSpawn) as GameObject; // Instantiates the prefab
@@ -59,8 +61,8 @@ public class SimplePrefabSpawner : EditorWindow
             if (randomizePosition) // If the randomizePosition is true, randomize the position
             {
                 Vector3 newPosition = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
-                Collider[] overlappingObjects = Physics.OverlapSphere(newPosition, spawnedObject.GetComponent<Collider>().bounds.size.magnitude);
-                if (overlappingObjects.Length == 0) // check if there are no other objects at the random position
+                int foundItemsCount = Physics.OverlapSphereNonAlloc(newPosition, spawnedObject.GetComponent<Collider>().bounds.size.magnitude, SimpleColliderObj);
+                if (foundItemsCount == 0) // check if there are no other objects at the random position
                 {
                     spawnedObject.transform.position = newPosition;
                 }
