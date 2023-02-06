@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ShaderTerrainShader
-  m_Shader: {fileID: -6465566751694194690, guid: e8d30e99f3fe51d458d4108d00ddc3ac, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 658a1139040fb3f4db9e8b729e50091f, type: 3}
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   m_InvalidKeywords: []
@@ -74,7 +74,9 @@ Material:
     - _DstBlend: 0
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
-    - _NoiseScale: 94.9
+    - _MaxHeight: 27.5
+    - _MinHeight: 0.001
+    - _NoiseScale: 48.9
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -114,7 +116,7 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _height: 4.37
+    - _height: 14.5
     - _step1: 0.157
     m_Colors:
     - _Color2: {r: 0.8509804, g: 0.8401587, b: 0.14117648, a: 1}
