@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using static MapGenerator;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class MapGenerator : MonoBehaviour
     public bool useFalloffMap;
     public bool autoUpdate;
     public bool enableThreading;
+    public object multiThreadLock;
     public Shader shader;
 
 
@@ -49,10 +51,27 @@ public class MapGenerator : MonoBehaviour
     void Update()
     {
         GenerateNoiseTexture2D(_texture);
-
+        if (!enableThreading)
+        {
+            if (_mapDataThreadInfoQueue.Count > 1)
+            {
+                for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
+            if (_meshDataThreadInfoQueue.Count > 1)
+            {
+                for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
+        }
         if (enableThreading)
         {
-
             if (_mapDataThreadInfoQueue.Count > 0)
             {
                 for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
@@ -70,6 +89,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+        
     }
 
     public void DrawMapInEditor()
@@ -142,7 +162,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
         _texture.Apply();
-        
+
         _endlessTerrain.MapShaderMaterial = new Material(shader);
     }
 
@@ -174,11 +194,11 @@ public class MapGenerator : MonoBehaviour
     }
     private void MapDataThreaded(Vector2 center, Action<MapData> callback)
     {
-        MapData mapData = GenerateMapData(center);
-        lock (_mapDataThreadInfoQueue) //lock, to prevent multiple threads to access the same data
-        {
-            _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
-        }
+            MapData mapData = GenerateMapData(center);
+            lock (_mapDataThreadInfoQueue) //lock, to prevent multiple threads to access the same data
+            {
+                _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+            }
     }
 
     public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
