@@ -17,7 +17,6 @@ namespace StateManager
                 {
                     attackIsReady = false;
                     manager.CoolDownTimer = 2f;
-                    Debug.Log("Animation Attack");
                     manager.Animator.Play("Attack", 0);
                     DamagaDoMethod();
                 }
@@ -27,7 +26,6 @@ namespace StateManager
         {
             GameManager._gameManager.PlayerHealth.DamageUnit(10);
             GameManager._gameManager.UpdateHealthBar(GameManager._gameManager.PlayerHealth.Health);
-            Debug.Log(GameManager._gameManager.PlayerHealth.Health);
         }
 
         public override State ExecuteCurrentState(StateManager manager)

@@ -41,12 +41,12 @@ namespace KI_Project
             _ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10); // Camera ignore specific layers
         }
 
-        public void FollowTarget(float delta) // Follow target, camera rotation around target
+        public void FollowTarget(float delta) // Follow prefab, camera rotation around prefab
         {
             Vector3 targetPosition =
                 Vector3.SmoothDamp(_myTransform.position, targetTransform.position, ref _cameraFollowVelocity, delta / followSpeed);
 
-            _myTransform.position = targetPosition; // Set position to target position
+            _myTransform.position = targetPosition; // Set position to prefab position
         }
 
         public void HandleCameraRotation(float delta, float mouseXInput, float mouseYInput) // Handle camera rotations
@@ -59,14 +59,14 @@ namespace KI_Project
 
             Vector3 rotation = Vector3.zero;
             rotation.y = _lookAngle; // Set rotation to look angle
-            Quaternion targetRotation = Quaternion.Euler(rotation); // Create target rotation
-            _myTransform.rotation = targetRotation; // Set rotation to target rotation
+            Quaternion targetRotation = Quaternion.Euler(rotation); // Create prefab rotation
+            _myTransform.rotation = targetRotation; // Set rotation to prefab rotation
 
             rotation = Vector3.zero;
             rotation.x = _pivotAngle; // Set rotation to pivot angle
 
-            targetRotation = Quaternion.Euler(rotation); // Create target rotation
-            cameraPivotTransform.localRotation = targetRotation; // Set rotation to target rotation
+            targetRotation = Quaternion.Euler(rotation); // Create prefab rotation
+            cameraPivotTransform.localRotation = targetRotation; // Set rotation to prefab rotation
         }
     }
 }

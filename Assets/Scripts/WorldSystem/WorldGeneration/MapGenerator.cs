@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading;
+using static MapGenerator;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -26,36 +26,69 @@ public class MapGenerator : MonoBehaviour
     public AnimationCurve meshHeightCurve;
     public bool useFalloffMap;
     public bool autoUpdate;
+    public bool enableThreading;
+    public Shader shader;
+
 
     public TerrainTypes[] regions;
     public float[,] FalloffMap;
+
+    [SerializeField] private Texture2D _texture;
+    private EndlessTerrain _endlessTerrain;
 
     Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
 
     private void Awake()
     {
+        _endlessTerrain = FindObjectOfType<EndlessTerrain>();
+        _texture = Resources.Load("Visuals/Material/WorldGeneration/Material/NoiseMap") as Texture2D;
+        GenerateNoiseTexture2D(_texture);
         FalloffMap = FalloffGenerator.GenerateFalloffMap(MapChunkSize);
     }
 
     void Update()
     {
-        if (_mapDataThreadInfoQueue.Count > 0)
+        GenerateNoiseTexture2D(_texture);
+        if (!enableThreading)
         {
-            for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
+            if (_mapDataThreadInfoQueue.Count > 1)
             {
-                MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
-                threadInfo.Callback(threadInfo.Parameter);
+                for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
+            if (_meshDataThreadInfoQueue.Count > 1)
+            {
+                for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
             }
         }
-        if (_meshDataThreadInfoQueue.Count > 0)
+        if (enableThreading)
         {
-            for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
+            if (_mapDataThreadInfoQueue.Count > 0)
             {
-                MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
-                threadInfo.Callback(threadInfo.Parameter);
+                for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
+            if (_meshDataThreadInfoQueue.Count > 0)
+            {
+                for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
             }
         }
+        
     }
 
     public void DrawMapInEditor()
@@ -113,6 +146,25 @@ public class MapGenerator : MonoBehaviour
 
         return new MapData(noiseMap, colorMap);
     }
+
+    private void GenerateNoiseTexture2D(Texture2D _texture)
+    {
+        Vector2 center = Vector2.zero;
+        //gets the values of the noiseMap and sets the pixels of the texture to the values of the noiseMap for usage in shaders
+        float[,] noiseMap = Noise.GenerateNoiseMap(MapChunkSize + 2, MapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
+        _texture = new Texture2D(noiseMap.GetLength(0), noiseMap.GetLength(1));
+        for (int x = 0; x < noiseMap.GetLength(0); x++)
+        {
+            for (int y = 0; y < noiseMap.GetLength(1); y++)
+            {
+                _texture.SetPixel(x, y, Color.Lerp(Color.black, Color.white, noiseMap[x, y]));
+            }
+        }
+        _texture.Apply();
+
+        _endlessTerrain.MapShaderMaterial = new Material(shader);
+    }
+
     private void OnValidate()
     {
         if (lacunarity < 1)
@@ -141,11 +193,11 @@ public class MapGenerator : MonoBehaviour
     }
     private void MapDataThreaded(Vector2 center, Action<MapData> callback)
     {
-        MapData mapData = GenerateMapData(center);
-        lock (_mapDataThreadInfoQueue) //lock, to prevent multiple threads to access the same data
-        {
-            _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
-        }
+            MapData mapData = GenerateMapData(center);
+            lock (_mapDataThreadInfoQueue) //lock, to prevent multiple threads to access the same data
+            {
+                _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+            }
     }
 
     public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
@@ -185,6 +237,7 @@ public class MapGenerator : MonoBehaviour
     {
         public readonly float[,] HeightMap;
         public readonly Color[] ColorMap;
+        //public readonly Texture2D Texture;
 
         public MapData(float[,] heightMap, Color[] colorMap)
         {
@@ -198,7 +251,6 @@ public class MapGenerator : MonoBehaviour
         public string name;
         public float height;
         public Color color;
-        public Shader Shader;
     }
     #endregion
 }

@@ -26,9 +26,8 @@ namespace StateManager
             {
                 return this;
             }
-            else //should never happen. Debug-Fallback
+            else //should never happen.
             {
-                Debug.Log("Something went wrong in Statemanager. Returning to Idle");
                 return manager.IdleState;
             }
         }

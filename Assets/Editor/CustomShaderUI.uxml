@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Slider picking-mode="Ignore" label="Region 1" value="50" high-value="100" name="Region1" view-data-key="_step1" />
-    <ui:Slider picking-mode="Ignore" label="Region 2" value="50" high-value="100" name="Region2" view-data-key="_step2" />
-    <ui:Slider picking-mode="Ignore" label="Region 3" value="50" high-value="100" name="Region3" view-data-key="_step3" />
-    <ui:Slider picking-mode="Ignore" label="Region 4" value="50" high-value="100" name="Region4" view-data-key="_step4" />
-    <ui:Slider picking-mode="Ignore" label="Region 5" value="50" high-value="100" name="Region5" view-data-key="_step5" />
-</ui:UXML>

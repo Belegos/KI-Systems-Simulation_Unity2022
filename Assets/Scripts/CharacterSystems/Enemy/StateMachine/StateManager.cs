@@ -95,8 +95,8 @@ namespace StateManager
 
             _navAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponentInChildren<Animator>();
-            InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the target is in range, if not sets target Destination back to starting point
-            InvokeRepeating("CheckDistanceBetweenEnemyAndPlayer", 0, 0.5f); //checks every 0.5 sec if the target is in _attackRange, if true sets bool IsInAttackRange, for attack state switch
+            InvokeRepeating("DistanceCheck", 0, 0.5f); //checks every 0.5 sec if the prefab is in range, if not sets prefab Destination back to starting point
+            InvokeRepeating("CheckDistanceBetweenEnemyAndPlayer", 0, 0.5f); //checks every 0.5 sec if the prefab is in _attackRange, if true sets bool IsInAttackRange, for attack state switch
 
         }
 
@@ -169,13 +169,12 @@ namespace StateManager
         {
             _currentState = nextState;
         }
-        public void TargetNullCheck() //follows target, unless it is null, returns to start position
+        public void TargetNullCheck() //follows prefab, unless it is null, returns to start position
         {
             if (CurrentState != null)
             {
                 if (CurrentState is ChaseState)
                 {
-                    Debug.Log($"Current State is {CurrentState}");
                     if (currentTarget != null)
                     {
                         _navAgent.destination = currentTarget.transform.position;
@@ -187,15 +186,10 @@ namespace StateManager
                 }
                 if (CurrentState is IdleState)
                 {
-                    Debug.Log($"Current State is {CurrentState}");
                     if (_navAgent.destination != startPosition)
                     {
                         _navAgent.destination = startPosition;
                     }
-                }
-                if (CurrentState is AttackState)
-                {
-                    Debug.Log($"Current State is: {CurrentState}");
                 }
             }
         }
