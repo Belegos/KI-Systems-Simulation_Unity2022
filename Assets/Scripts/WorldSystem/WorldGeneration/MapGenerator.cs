@@ -27,7 +27,6 @@ public class MapGenerator : MonoBehaviour
     public bool useFalloffMap;
     public bool autoUpdate;
     public bool enableThreading;
-    public object multiThreadLock;
     public Shader shader;
 
 
