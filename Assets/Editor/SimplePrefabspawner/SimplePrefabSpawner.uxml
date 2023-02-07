@@ -4,7 +4,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="GeneralSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <uie:LayerMaskField label="Layer" name="Layer" />
-        <uie:ObjectField label="Prefab" name="Prefab" type="UnityEngine.GameObject, UnityEngine.CoreModule" />
+        <uie:ObjectField label="Prefab" name="Prefab" type="UnityEngine.GameObject, UnityEngine.CoreModule" allow-scene-objects="false" />
     </ui:VisualElement>
     <ui:VisualElement name="InstanciationSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <ui:Label text="Rotation" display-tooltip-when-elided="true" name="Rotation" style="-unity-text-align: upper-center; -unity-font-style: bold;" />

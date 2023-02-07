@@ -40,36 +40,56 @@ public class SimplePrefabSpawner : EditorWindow
         SceneView.duringSceneGui += OnSceneGui;
     }
 
-    private void OnSceneGui(SceneView obj)
+    private void OnSceneGui(SceneView sceneView)
     {
         if (!_active.value) return;
         var evt = Event.current;
         if(evt.IsLeftMouseButtonDown())
         {
             var ray = HandleUtility.GUIPointToWorldRay(evt.mousePosition);
-            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerMask.value))
+            Physics.Raycast(ray, out var raycastHit, Mathf.Infinity, _layerMask.value);
+            if (raycastHit.collider == null) return;
+            if (raycastHit.collider)
             {
-                var go = Instantiate(_prefab, hit.point, Quaternion.identity);
-                if (_randomPosition.value)
-                {
-                    go.transform.position = hit.point + UnityEngine.Random.insideUnitSphere;
-                }
-                if (_randomYRotation.value)
-                {
-                    go.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
-                }
-                if (_randomScale.value)
-                {
-                    go.transform.localScale = Vector3.one * UnityEngine.Random.Range(_minScale.value, _maxScale.value);
-                }
-                if (_alignToNormal.value)
-                {
-                    go.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                }
+                var obj = CreatePrefab(raycastHit.point);
+                ApplyRandomRotation(obj, raycastHit.normal);
+                ApplyRandomScale(obj);
+                Undo.RegisterCreatedObjectUndo(obj,"Prefab spawned");
             }
+
         }
     }
 
+    private GameObject CreatePrefab(Vector3 pos)
+    {
+        var obj = PrefabUtility.InstantiatePrefab(_prefab)as GameObject; //short for intanciate
+        obj.transform.position = pos;
+        return obj;
+    }
+    private void ApplyRandomRotation(GameObject obj, Vector3 normal)
+    {
+        var minRotation = _minRotation.value;
+        var maxRotation = _maxRotation.value;
+        var alignToNormal = _alignToNormal.value;
+
+        if (alignToNormal)
+        {
+            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal);
+        }
+        var rotationInEuler = obj.transform.rotation.eulerAngles;
+        obj.transform.rotation = Quaternion.Euler(
+            rotationInEuler.x + UnityEngine.Random.Range(minRotation.x, maxRotation.x),
+            rotationInEuler.y + UnityEngine.Random.Range(minRotation.y, maxRotation.z),
+            rotationInEuler.z + UnityEngine.Random.Range(minRotation.z, maxRotation.z));
+    }
+
+    private void ApplyRandomScale(GameObject obj)
+    {
+        var minScale = _minScale.value;
+        var maxScale = _maxScale.value;
+        obj.transform.localScale = Vector3.one * UnityEngine.Random.Range(minScale, maxScale);
+    }
+    
     private void InitFields()
     {
         _layerMask = rootVisualElement.Q<LayerMaskField>("Layer");
@@ -79,8 +99,9 @@ public class SimplePrefabSpawner : EditorWindow
         _maxScale = rootVisualElement.Q<FloatField>("MaxScale");
         _active = rootVisualElement.Q<Toggle>("Active");
         _alignToNormal = rootVisualElement.Q<Toggle>("AlignToNormal");
-        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
         _randomScale = rootVisualElement.Q<Toggle>("RndScale");
+        //TODO: implement this two
+        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
         _randomPosition = rootVisualElement.Q<Toggle>("RndPosition");
 
         var _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
