@@ -46,7 +46,27 @@ public class SimplePrefabSpawner : EditorWindow
         var evt = Event.current;
         if(evt.IsLeftMouseButtonDown())
         {
-            
+            var ray = HandleUtility.GUIPointToWorldRay(evt.mousePosition);
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, _layerMask.value))
+            {
+                var go = Instantiate(_prefab, hit.point, Quaternion.identity);
+                if (_randomPosition.value)
+                {
+                    go.transform.position = hit.point + UnityEngine.Random.insideUnitSphere;
+                }
+                if (_randomYRotation.value)
+                {
+                    go.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
+                }
+                if (_randomScale.value)
+                {
+                    go.transform.localScale = Vector3.one * UnityEngine.Random.Range(_minScale.value, _maxScale.value);
+                }
+                if (_alignToNormal.value)
+                {
+                    go.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                }
+            }
         }
     }
 
