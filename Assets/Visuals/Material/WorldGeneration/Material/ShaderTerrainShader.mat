@@ -98,10 +98,10 @@ Material:
     - _Step2: 0.308
     - _Step3: 0.335
     - _Step4: 0.445
-    - _Step5: 0.698
-    - _Step6: 1
-    - _Step7: 0.66
-    - _Step8: 0.73
+    - _Step5: 0.722
+    - _Step6: 0.911
+    - _Step7: 0.912
+    - _Step8: 0.984
     - _SupportDecals: 1
     - _SurfaceType: 0
     - _TransparentBackfaceEnable: 0

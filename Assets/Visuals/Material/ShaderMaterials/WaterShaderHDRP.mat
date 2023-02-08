@@ -62,7 +62,7 @@ Material:
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
     - _CullModeForward: 2
-    - _Depth: 3.02
+    - _Depth: -5.3
     - _DepthOffsetEnable: 0
     - _Displacement: 0.71
     - _DoubleSidedEnable: 0
@@ -102,7 +102,7 @@ Material:
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
     - _UseShadowThreshold: 0
-    - _WaveStrength: 1.52
+    - _WaveStrength: 1.55
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
