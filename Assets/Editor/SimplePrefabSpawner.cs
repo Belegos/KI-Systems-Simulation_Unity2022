@@ -8,7 +8,7 @@ public class SimplePrefabSpawner : EditorWindow
 {
     [SerializeField] private VisualTreeAsset _tree;
 
-    private ObjectField _prefabInput;
+    //private ObjectField _prefabInput;
     private LayerMaskField _layerMask;
     private Vector3Field _minRotation;
     private Vector3Field _maxRotation;
