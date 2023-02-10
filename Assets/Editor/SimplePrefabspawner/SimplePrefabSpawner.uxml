@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:VisualElement name="Title">
+    <ui:VisualElement name="Title" style="min-width: initial; min-height: initial;">
         <ui:Label text="Simple Prefab Spawner" display-tooltip-when-elided="true" name="Title" style="height: 53px; -unity-font-style: bold; -unity-text-align: middle-center; font-size: 22px;" />
     </ui:VisualElement>
-    <ui:VisualElement name="GeneralSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+    <ui:VisualElement name="GeneralSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; min-width: initial; min-height: initial;">
         <uie:LayerMaskField label="Layer" name="Layer" />
         <uie:ObjectField label="Prefab" name="Prefab" type="UnityEngine.GameObject, UnityEngine.CoreModule" allow-scene-objects="false" />
     </ui:VisualElement>
-    <ui:VisualElement name="InstanciationSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+    <ui:VisualElement name="InstanciationSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; min-width: initial; min-height: initial;">
         <ui:Label text="Rotation" display-tooltip-when-elided="true" name="Rotation" style="-unity-text-align: upper-center; -unity-font-style: bold;" />
         <uie:Vector3Field label="MinRotation" name="MinRotation" />
         <uie:Vector3Field label="MaxRotation" name="MaxRotation" />
@@ -14,7 +14,7 @@
         <uie:FloatField label="MinScale" value="0.5" name="MinScale" />
         <uie:FloatField label="MaxScale" value="10" name="MaxScale" />
     </ui:VisualElement>
-    <ui:VisualElement name="ToggleSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+    <ui:VisualElement name="ToggleSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; min-width: initial; min-height: initial;">
         <ui:Toggle name="Active" text="Active" />
         <ui:Toggle name="AlignToNormal" text="Align to Normal" />
         <ui:Label text="Random Setting" display-tooltip-when-elided="true" name="ToogleLabel" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; -unity-text-align: upper-center; -unity-font-style: bold;" />
@@ -22,4 +22,11 @@
         <ui:Toggle name="RndScale" text="Random Scale" />
         <ui:Toggle name="RndPosition" text="Random Position" />
     </ui:VisualElement>
+    <ui:VisualElement name="SaveLoad" style="min-width: initial; min-height: initial;" />
+    <ui:Label text="Save &amp; Load" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-font-style: bold;" />
+    <ui:GroupBox style="flex-direction: row-reverse; padding-top: 10px;">
+        <ui:Button text="Save" display-tooltip-when-elided="true" name="Save" binding-path="Save" />
+        <ui:Button text="Load" display-tooltip-when-elided="true" name="Load" binding-path="Load" />
+        <uie:ObjectField type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" name="DataField" allow-scene-objects="false" style="width: 350px; flex-direction: row-reverse; align-items: auto; justify-content: center; position: relative; transform-origin: center;" />
+    </ui:GroupBox>
 </ui:UXML>
