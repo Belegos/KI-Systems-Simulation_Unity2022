@@ -11,21 +11,31 @@ public class SimplePrefabSpawner : EditorWindow
     [SerializeField] private SimPrefSpwn_Data _dataSheet;
     private PlacementLogic _placementLogic;
 
-    private ObjectField _prefabInput;
+    //private ObjectField _prefabInput;
     private LayerMaskField _layerMask;
-    private Vector3Field _minRotation;
-    private Vector3Field _maxRotation;
-    private FloatField _minScale;
-    private FloatField _maxScale;
+    private GameObject _prefab;
+
     private Toggle _active;
     private Toggle _alignToNormal;
+    
+    private DropdownField _rndSettingsDropdown;
+    private Toggle _randomXRotation;
+    private Toggle _randomYRotation;
+    private Toggle _randomZRotation;
+
+    private DropdownField _rndRotationDropdown;
+    private Vector3Field _minRotation;
+    private Vector3Field _maxRotation;
+
+    private DropdownField _scaleSettingsforRandom;
+    private FloatField _minScale;
+    private FloatField _maxScale;
+
     private Toggle _randomScale;
     private Toggle _randomRotation;
 
-    private Toggle _randomYRotation;
-    private Toggle _randomPosition;
+    private DropdownField _loadLayoutDropdown;
 
-    private GameObject _prefab;
 
     [MenuItem("Tools/SimplePrefabSpawner")]
     public static void ShowEditor()
@@ -42,6 +52,14 @@ public class SimplePrefabSpawner : EditorWindow
     }
     private void InitFields()
     {
+        _rndSettingsDropdown = rootVisualElement.Q<DropdownField>("_rndSettingsDropdown");
+        _rndRotationDropdown = rootVisualElement.Q<DropdownField>("_rndRotationDropdown");
+        _scaleSettingsforRandom = rootVisualElement.Q<DropdownField>("_scaleSettingsforRandom");
+        _loadLayoutDropdown = rootVisualElement.Q<DropdownField>("_loadLayoutDropdown");
+        _randomXRotation = rootVisualElement.Q<Toggle>("_randomXRotation");
+        _randomYRotation = rootVisualElement.Q<Toggle>("_randomYRotation");
+        _randomZRotation = rootVisualElement.Q<Toggle>("_randomZRotation");
+
         _layerMask = rootVisualElement.Q<LayerMaskField>("Layer");
         _minRotation = rootVisualElement.Q<Vector3Field>("MinRotation");
         _maxRotation = rootVisualElement.Q<Vector3Field>("MaxRotation");
@@ -51,9 +69,7 @@ public class SimplePrefabSpawner : EditorWindow
         _alignToNormal = rootVisualElement.Q<Toggle>("AlignToNormal");
         _randomScale = rootVisualElement.Q<Toggle>("RndScale");
         _randomRotation = rootVisualElement.Q<Toggle>("RndRotation");
-        //TODO: implement this two
         _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
-        _randomPosition = rootVisualElement.Q<Toggle>("RndPosition");
 
         var _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
         _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
@@ -92,7 +108,7 @@ public class SimplePrefabSpawner : EditorWindow
         _alignToNormal.value = _dataSheet._alignToNormal;
         _randomScale.value = _dataSheet._randomScale;
         _prefab = _dataSheet._prefab;
-        _randomRotation.value = _dataSheet._randomRotation;
+        //_randomRotation.value = false;
     }
 
     private void OnSceneGui(SceneView sceneView)

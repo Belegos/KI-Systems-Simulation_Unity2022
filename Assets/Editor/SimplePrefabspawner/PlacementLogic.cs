@@ -46,13 +46,8 @@ public class PlacementLogic
         var obj = PrefabUtility.InstantiatePrefab(_prefab) as GameObject; //short for intanciate
         var collider = obj.GetComponent<Collider>();
         var bounds = obj.GetComponent<Collider>().bounds;
-        //obj.transform.position = new Vector3(obj.transform.position.x ,(obj.transform.position.y + bounds.size.y/2+_offset.y),obj.transform.position.z);
-        //Debug.Log("Objectposition-X:"+ collider.transform.position.x); ;
-        //Debug.Log("Objectposition-Y:"+ collider.transform.position.y); ;
-        //Debug.Log("Objectposition-Z:"+ collider.transform.position.z); ;
-        //Debug.Log("Raycast hit: Y:"+ pos.y+"|X:"+pos.x+"|Z:"+pos.z);
-        obj.transform.position = pos + new Vector3(0, bounds.size.y / 2 + _offset.y, 0);
         var colliders = Physics.OverlapBox(bounds.center, bounds.extents, obj.transform.rotation, _layerMask);
+        obj.transform.position = pos + new Vector3(0, bounds.size.y / 2 + _offset.y, 0);
 
         //if (colliders.Length > 0)
         //{
@@ -65,10 +60,6 @@ public class PlacementLogic
     private void ApplyRandomRotation(GameObject obj, Vector3 normal, Vector3 _minRotation, Vector3 _maxRotation, Toggle _alignToNormal)
     {
         var alignToNormal = _alignToNormal.value;
-        if (alignToNormal)
-        {
-            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal); //todo: fix rotation when 
-        }
         var rotationInEuler = obj.transform.rotation.eulerAngles;
         obj.transform.rotation = Quaternion.Euler(
             rotationInEuler.x + UnityEngine.Random.Range(_minRotation.x, _maxRotation.x),
