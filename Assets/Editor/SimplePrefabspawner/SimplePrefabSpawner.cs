@@ -37,6 +37,7 @@ public class SimplePrefabSpawner : EditorWindow
     {
         _tree.CloneTree(rootVisualElement);
         InitFields();
+        SetValueFromDataSheet();
     }
     private void InitFields()
     {
@@ -92,7 +93,7 @@ public class SimplePrefabSpawner : EditorWindow
 
     private void OnSceneGui(SceneView sceneView)
     {
-        Start();
+        //Start();
         _placementLogic.Main(_layerMask, _prefab, _active, _minRotation, _maxRotation, _alignToNormal, _minScale, _maxScale);
     }
 }

@@ -2,7 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using Unity.VisualScripting;
 
 public class PlacementLogic
 {
@@ -25,13 +24,17 @@ public class PlacementLogic
             {
                 var obj = CreatePrefab(raycastHit.point, _prefab, layerMask, _offset);
                 if (obj == null) return;
-                if (!_active.value)//TODO: Implement bool
+                if (_active.value)//TODO: implement bool
+                {
+                    ApplyRandomScale(obj, _minScale, _maxScale);
+                }
+                if (_active.value)//TODO: Implement bool
                 {
                     ApplyRandomRotation(obj, raycastHit.normal, minRotation, maxRotation, _alignToNormal);
                 }
-                if (!_active.value)//TODO: implement bool
+                if (_alignToNormal.value == true)
                 {
-                    ApplyRandomScale(obj, _minScale, _maxScale);
+                    obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, raycastHit.normal);
                 }
                 Undo.RegisterCreatedObjectUndo(obj, "Prefab spawned");
             }
@@ -48,7 +51,7 @@ public class PlacementLogic
         //Debug.Log("Objectposition-Y:"+ collider.transform.position.y); ;
         //Debug.Log("Objectposition-Z:"+ collider.transform.position.z); ;
         //Debug.Log("Raycast hit: Y:"+ pos.y+"|X:"+pos.x+"|Z:"+pos.z);
-        obj.transform.position = pos + new Vector3(0, bounds.size.y /2 +_offset.y, 0);
+        obj.transform.position = pos + new Vector3(0, bounds.size.y / 2 + _offset.y, 0);
         var colliders = Physics.OverlapBox(bounds.center, bounds.extents, obj.transform.rotation, _layerMask);
 
         //if (colliders.Length > 0)
@@ -62,15 +65,15 @@ public class PlacementLogic
     private void ApplyRandomRotation(GameObject obj, Vector3 normal, Vector3 _minRotation, Vector3 _maxRotation, Toggle _alignToNormal)
     {
         var alignToNormal = _alignToNormal.value;
-        if (alignToNormal)
-        {
-            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        }
         var rotationInEuler = obj.transform.rotation.eulerAngles;
         obj.transform.rotation = Quaternion.Euler(
             rotationInEuler.x + UnityEngine.Random.Range(_minRotation.x, _maxRotation.x),
             rotationInEuler.y + UnityEngine.Random.Range(_minRotation.y, _maxRotation.z),
             rotationInEuler.z + UnityEngine.Random.Range(_minRotation.z, _maxRotation.z));
+        if (alignToNormal)
+        {
+            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal); //todo: fix rotation when 
+        }
     }
 
     private void ApplyRandomScale(GameObject obj, FloatField _minScale, FloatField _maxScale)
@@ -80,17 +83,5 @@ public class PlacementLogic
         obj.transform.localScale = Vector3.one * UnityEngine.Random.Range(minScale, maxScale);
     }
 
-    public void LoadData(SimPrefSpwn_Data _dataSheet, LayerMaskField _layerMask, GameObject _prefab, Toggle _active, Vector3Field _minRotation, Vector3Field _maxRotation, Toggle _alignToNormal, FloatField _minScale, FloatField _maxScale)
-    {
-        _layerMask.value = _dataSheet._layerMask;
-        _prefab = _dataSheet._prefab;
-        _active.value = _dataSheet._active;
-        _minRotation.value = _dataSheet._minRotation;
-        _maxRotation.value = _dataSheet._minRotation;
-
-        _alignToNormal.value = _dataSheet._alignToNormal;
-        _minScale.value = _dataSheet._minScale;
-        _maxScale.value = _dataSheet._maxScale;
-    }
 }
 
