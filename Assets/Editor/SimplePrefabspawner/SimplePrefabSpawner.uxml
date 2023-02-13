@@ -36,7 +36,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="LoadLayout" focusable="true">
             <ui:Foldout text="Load Layout" value="true" name="_loadLayoutDropdown">
-                <uie:ObjectField label="Object Field" name="DataField" />
+                <uie:ObjectField label="Object Field" name="DataField" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" />
             </ui:Foldout>
         </ui:VisualElement>
     </ui:VisualElement>

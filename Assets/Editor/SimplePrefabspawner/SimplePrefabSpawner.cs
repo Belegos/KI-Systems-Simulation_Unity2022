@@ -11,7 +11,7 @@ public class SimplePrefabSpawner : EditorWindow
     [SerializeField] private SimPrefSpwn_Data _dataSheet;
     private PlacementLogic _placementLogic;
 
-    //private ObjectField _prefabInput;
+    private ObjectField _prefabInput;
     private LayerMaskField _layerMask;
     private GameObject _prefab;
 
@@ -71,7 +71,7 @@ public class SimplePrefabSpawner : EditorWindow
         _randomRotation = rootVisualElement.Q<Toggle>("RndRotation");
         _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
 
-        var _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
+        _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
         _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
         
         var _dataSheetInput = rootVisualElement.Q<ObjectField>("DataField");
@@ -107,7 +107,7 @@ public class SimplePrefabSpawner : EditorWindow
         _active.value = _dataSheet._active;
         _alignToNormal.value = _dataSheet._alignToNormal;
         _randomScale.value = _dataSheet._randomScale;
-        _prefab = _dataSheet._prefab;
+        _prefabInput.value = _dataSheet._prefab;
         //_randomRotation.value = false;
     }
 
