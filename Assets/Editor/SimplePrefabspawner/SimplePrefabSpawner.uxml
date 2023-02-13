@@ -7,7 +7,7 @@
         <uie:ObjectField label="Prefab" name="Prefab" type="UnityEngine.GameObject, UnityEngine.CoreModule" allow-scene-objects="false" />
     </ui:VisualElement>
     <ui:VisualElement name="InstanciationSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; min-width: initial; min-height: initial;">
-        <ui:Label text="Rotation" display-tooltip-when-elided="true" name="Rotation" style="-unity-text-align: upper-center; -unity-font-style: bold;" />
+        <ui:Label text="Rotation" display-tooltip-when-elided="true" name="Rotation" style="-unity-text-align: flex-start; -unity-font-style: bold;" />
         <ui:Toggle name="RndRotation" text="Random Rotation" />
         <uie:Vector3Field label="MaxRotation" name="MaxRotation" />
         <uie:Vector3Field label="MinRotation" name="MinRotation" />
@@ -23,11 +23,12 @@
         <ui:Toggle name="RndScale" text="Random Scale" />
         <ui:Toggle name="RndPosition" text="Random Position" />
     </ui:VisualElement>
-    <ui:VisualElement name="SaveLoad" style="min-width: initial; min-height: initial;" />
-    <ui:Label text="Save &amp; Load" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-font-style: bold;" />
-    <ui:GroupBox style="flex-direction: row-reverse; padding-top: 10px;">
+    <ui:VisualElement name="SaveLoad" style="min-width: initial; min-height: initial;">
+        <ui:Label text="Save &amp; Load" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-font-style: bold;" />
+    </ui:VisualElement>
+    <ui:GroupBox name="SaveAndLoad" style="flex-direction: row-reverse; padding-top: 10px;">
         <ui:Button text="Save" display-tooltip-when-elided="true" name="Save" binding-path="Save" />
         <ui:Button text="Load" display-tooltip-when-elided="true" name="Load" binding-path="Load" />
-        <uie:ObjectField type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" name="DataField" allow-scene-objects="false" style="width: 350px; flex-direction: row-reverse; align-items: auto; justify-content: center; position: relative; transform-origin: center;" />
+        <uie:ObjectField type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" name="DataField" allow-scene-objects="false" style="width: 231px; flex-direction: row-reverse; align-items: auto; justify-content: space-between; position: relative; transform-origin: center; min-width: auto;" />
     </ui:GroupBox>
 </ui:UXML>
