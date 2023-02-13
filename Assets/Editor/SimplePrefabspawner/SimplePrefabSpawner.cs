@@ -19,9 +19,10 @@ public class SimplePrefabSpawner : EditorWindow
     private FloatField _maxScale;
     private Toggle _active;
     private Toggle _alignToNormal;
+    private Toggle _randomScale;
+    private Toggle _randomRotation;
 
     private Toggle _randomYRotation;
-    private Toggle _randomScale;
     private Toggle _randomPosition;
 
     private GameObject _prefab;
@@ -49,6 +50,7 @@ public class SimplePrefabSpawner : EditorWindow
         _active = rootVisualElement.Q<Toggle>("Active");
         _alignToNormal = rootVisualElement.Q<Toggle>("AlignToNormal");
         _randomScale = rootVisualElement.Q<Toggle>("RndScale");
+        _randomRotation = rootVisualElement.Q<Toggle>("RndRotation");
         //TODO: implement this two
         _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
         _randomPosition = rootVisualElement.Q<Toggle>("RndPosition");
@@ -88,13 +90,15 @@ public class SimplePrefabSpawner : EditorWindow
         _maxScale.value = _dataSheet._maxScale;
         _active.value = _dataSheet._active;
         _alignToNormal.value = _dataSheet._alignToNormal;
+        _randomScale.value = _dataSheet._randomScale;
         _prefab = _dataSheet._prefab;
+        _randomRotation.value = _dataSheet._randomRotation;
     }
 
     private void OnSceneGui(SceneView sceneView)
     {
         //Start();
-        _placementLogic.Main(_layerMask, _prefab, _active, _minRotation, _maxRotation, _alignToNormal, _minScale, _maxScale);
+        _placementLogic.Main(_layerMask, _prefab, _active, _minRotation, _maxRotation, _alignToNormal, _minScale, _maxScale,_randomScale, _randomRotation);
     }
 }
 

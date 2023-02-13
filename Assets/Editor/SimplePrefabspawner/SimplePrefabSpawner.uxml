@@ -8,8 +8,9 @@
     </ui:VisualElement>
     <ui:VisualElement name="InstanciationSettings" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; min-width: initial; min-height: initial;">
         <ui:Label text="Rotation" display-tooltip-when-elided="true" name="Rotation" style="-unity-text-align: upper-center; -unity-font-style: bold;" />
-        <uie:Vector3Field label="MinRotation" name="MinRotation" />
+        <ui:Toggle name="RndRotation" text="Random Rotation" />
         <uie:Vector3Field label="MaxRotation" name="MaxRotation" />
+        <uie:Vector3Field label="MinRotation" name="MinRotation" />
         <ui:Label text="Scale" display-tooltip-when-elided="true" name="Scale" style="-unity-font-style: bold; -unity-text-align: upper-center;" />
         <uie:FloatField label="MinScale" value="0.5" name="MinScale" />
         <uie:FloatField label="MaxScale" value="10" name="MaxScale" />

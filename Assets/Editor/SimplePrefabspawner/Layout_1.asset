@@ -17,8 +17,10 @@ MonoBehaviour:
     m_Bits: 128
   _prefab: {fileID: 4471789001051185893, guid: 0b85ac415becde546b72d2505c6080fc, type: 3}
   _active: 0
+  _randomScale: 0
   _minRotation: {x: 0, y: 0, z: 0}
   _maxRotation: {x: 0, y: 0, z: 0}
-  _alignToNormal: 0
+  _randomRotation: 0
+  _alignToNormal: 1
   _minScale: 1
   _maxScale: 2

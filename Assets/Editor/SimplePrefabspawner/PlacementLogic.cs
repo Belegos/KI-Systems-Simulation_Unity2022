@@ -5,14 +5,14 @@ using UnityEngine.UIElements;
 
 public class PlacementLogic
 {
-    public void Main(LayerMaskField _layerMask, GameObject _prefab, Toggle _active, Vector3Field _minRotation, Vector3Field _maxRotation, Toggle _alignToNormal, FloatField _minScale, FloatField _maxScale)
+    public void Main(LayerMaskField _layerMask, GameObject _prefab, Toggle _active, Vector3Field _minRotation, Vector3Field _maxRotation, Toggle _alignToNormal, FloatField _minScale, FloatField _maxScale, Toggle _randomScale, Toggle _randomRotation)
     {
         var active = _active.value;
         var minRotation = _minRotation.value;
         var maxRotation = _maxRotation.value;
         var layerMask = _layerMask.value;
         var _offset = new Vector3(0.01f, 0.01f, 0.01f);
-
+        
         if (!active) return;
         var evt = Event.current;
         if (evt.IsLeftMouseButtonDown())
@@ -24,15 +24,15 @@ public class PlacementLogic
             {
                 var obj = CreatePrefab(raycastHit.point, _prefab, layerMask, _offset);
                 if (obj == null) return;
-                if (_active.value)//TODO: implement bool
+                if (_randomScale.value)
                 {
                     ApplyRandomScale(obj, _minScale, _maxScale);
                 }
-                if (_active.value)//TODO: Implement bool
+                if (_randomRotation.value)
                 {
                     ApplyRandomRotation(obj, raycastHit.normal, minRotation, maxRotation, _alignToNormal);
                 }
-                if (_alignToNormal.value == true)
+                if (_alignToNormal.value)
                 {
                     obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, raycastHit.normal);
                 }
@@ -65,15 +65,15 @@ public class PlacementLogic
     private void ApplyRandomRotation(GameObject obj, Vector3 normal, Vector3 _minRotation, Vector3 _maxRotation, Toggle _alignToNormal)
     {
         var alignToNormal = _alignToNormal.value;
+        if (alignToNormal)
+        {
+            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal); //todo: fix rotation when 
+        }
         var rotationInEuler = obj.transform.rotation.eulerAngles;
         obj.transform.rotation = Quaternion.Euler(
             rotationInEuler.x + UnityEngine.Random.Range(_minRotation.x, _maxRotation.x),
             rotationInEuler.y + UnityEngine.Random.Range(_minRotation.y, _maxRotation.z),
             rotationInEuler.z + UnityEngine.Random.Range(_minRotation.z, _maxRotation.z));
-        if (alignToNormal)
-        {
-            obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, normal); //todo: fix rotation when 
-        }
     }
 
     private void ApplyRandomScale(GameObject obj, FloatField _minScale, FloatField _maxScale)
