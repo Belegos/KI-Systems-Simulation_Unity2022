@@ -65,8 +65,8 @@ public class SimplePrefabSpawner : EditorWindow
 
     private void OnEnable()
     {
-        SceneView.duringSceneGui += OnSceneGui;
         _placementLogic = (PlacementLogic)Activator.CreateInstance(typeof(PlacementLogic));
+        SceneView.duringSceneGui += OnSceneGui;
     }
 
     private void Start()
@@ -80,7 +80,7 @@ public class SimplePrefabSpawner : EditorWindow
 
     private void SetValueFromDataSheet()
     {
-        _layerMask.value = _dataSheet._layerMask;
+        _layerMask.value = _dataSheet._layerMask.value;
         _minRotation.value = _dataSheet._minRotation;
         _maxRotation.value = _dataSheet._maxRotation;
         _minScale.value = _dataSheet._minScale;
