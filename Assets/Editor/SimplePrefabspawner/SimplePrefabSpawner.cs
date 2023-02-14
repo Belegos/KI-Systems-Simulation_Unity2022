@@ -12,6 +12,7 @@ public class SimplePrefabSpawner : EditorWindow
     [SerializeField] private SimPrefSpwn_Data _dataSheet;
     private PlacementLogic _placementLogic;
     #region UIFields
+    private ScrollView _scroller;
     private LayerMaskField _layerMask;
     private ObjectField _prefabInput;
     private GameObject _prefab;
@@ -34,7 +35,7 @@ public class SimplePrefabSpawner : EditorWindow
     private FloatField _maxScale;
 
     private DropdownField _loadLayoutDropdown;
-    private Button readyButton;
+    private DropdownField _userManual;
     #endregion
 
     [MenuItem("Tools/SimplePrefabSpawner")]
@@ -56,6 +57,7 @@ public class SimplePrefabSpawner : EditorWindow
     /// </summary>
     private void InitFields()
     {
+        _scroller = rootVisualElement.Q<ScrollView>("_scroll");
         _layerMask = rootVisualElement.Q<LayerMaskField>("Layer");
         _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
         _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
@@ -84,6 +86,7 @@ public class SimplePrefabSpawner : EditorWindow
             _dataSheet = evtTwo.newValue as SimPrefSpwn_Data;
             SetValueFromDataSheet();
         });
+        _userManual = rootVisualElement.Q<DropdownField>("_userManual");
     }
 
     private void OnEnable()
