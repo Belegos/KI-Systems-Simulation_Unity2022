@@ -2,15 +2,16 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using Unity.VisualScripting;
 using System;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class SimplePrefabSpawner : EditorWindow
 {
     [SerializeField] private VisualTreeAsset _tree;
     [SerializeField] private SimPrefSpwn_Data _dataSheet;
     private PlacementLogic _placementLogic;
-
+    #region UIFields
     private LayerMaskField _layerMask;
     private ObjectField _prefabInput;
     private GameObject _prefab;
@@ -32,9 +33,9 @@ public class SimplePrefabSpawner : EditorWindow
     private FloatField _minScale;
     private FloatField _maxScale;
 
-    //private Toggle _randomRotation;
     private DropdownField _loadLayoutDropdown;
-
+    private Button readyButton;
+    #endregion
 
     [MenuItem("Tools/SimplePrefabSpawner")]
     public static void ShowEditor()
@@ -51,31 +52,32 @@ public class SimplePrefabSpawner : EditorWindow
     }
 
     /// <summary>
-    /// Links the RootVisuallElement with the attributes.
-    /// Register events for the PrefabField and DataSheetField when a value is changed.
+    /// Loads and registers to event based values, from the scriptableObjectClass SimPrefSpwn_Data.
     /// </summary>
     private void InitFields()
     {
-        _rndSettingsDropdown = rootVisualElement.Q<DropdownField>("_rndSettingsDropdown");
-        _rndRotationDropdown = rootVisualElement.Q<DropdownField>("_rndRotationDropdown");
-        _scaleSettingsforRandom = rootVisualElement.Q<DropdownField>("_scaleSettingsforRandom");
-        _loadLayoutDropdown = rootVisualElement.Q<DropdownField>("_loadLayoutDropdown");
-        _randomXRotation = rootVisualElement.Q<Toggle>("RndXRotation");
-        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
-        _randomZRotation = rootVisualElement.Q<Toggle>("RndZRotation");
-
         _layerMask = rootVisualElement.Q<LayerMaskField>("Layer");
-        _minRotation = rootVisualElement.Q<Vector3Field>("MinRotation");
-        _maxRotation = rootVisualElement.Q<Vector3Field>("MaxRotation");
-        _minScale = rootVisualElement.Q<FloatField>("MinScale");
-        _maxScale = rootVisualElement.Q<FloatField>("MaxScale");
+        _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
+        _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
+
         _active = rootVisualElement.Q<Toggle>("Active");
         _alignToNormal = rootVisualElement.Q<Toggle>("AlignToNormal");
         _randomScale = rootVisualElement.Q<Toggle>("RndScale");
 
-        _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
-        _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
+        _rndSettingsDropdown = rootVisualElement.Q<DropdownField>("_rndSettingsDropdown");
+        _randomXRotation = rootVisualElement.Q<Toggle>("RndXRotation");
+        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
+        _randomZRotation = rootVisualElement.Q<Toggle>("RndZRotation");
 
+        _rndRotationDropdown = rootVisualElement.Q<DropdownField>("_rndRotationDropdown");
+        _minRotation = rootVisualElement.Q<Vector3Field>("MinRotation");
+        _maxRotation = rootVisualElement.Q<Vector3Field>("MaxRotation");
+
+        _scaleSettingsforRandom = rootVisualElement.Q<DropdownField>("_scaleSettingsDropdown");
+        _minScale = rootVisualElement.Q<FloatField>("MinScale");
+        _maxScale = rootVisualElement.Q<FloatField>("MaxScale");
+
+        _loadLayoutDropdown = rootVisualElement.Q<DropdownField>("_loadLayoutDropdown");
         var _dataSheetInput = rootVisualElement.Q<ObjectField>("DataField");
         _dataSheetInput.RegisterValueChangedCallback(evtTwo =>
         {
@@ -90,14 +92,6 @@ public class SimplePrefabSpawner : EditorWindow
         SceneView.duringSceneGui += OnSceneGui;
     }
 
-    private void Start()
-    {
-        if (_layerMask.value > 0) return;
-        else
-        {
-            SetValueFromDataSheet();
-        }
-    }
     /// <summary>
     /// Sets the values from the data sheet to the fields
     /// </summary>
@@ -120,11 +114,14 @@ public class SimplePrefabSpawner : EditorWindow
         _minScale.value = _dataSheet._minScale;
         _maxScale.value = _dataSheet._maxScale;
     }
-
+    /// <summary>
+    /// Actuall logic for prefab placement, does not modify the View
+    /// </summary>
+    /// <param name="sceneView"></param>
     private void OnSceneGui(SceneView sceneView)
     {
-        //Start();
-        _placementLogic.Main(_layerMask, _prefabInput, _active, _alignToNormal,_randomScale,_randomXRotation, _randomYRotation,_randomZRotation, _minScale, _maxScale, _minRotation, _maxRotation);
+        _placementLogic.Main(_layerMask, _prefabInput, _active, _alignToNormal, _randomScale, _randomXRotation,
+            _randomYRotation, _randomZRotation, _minScale, _maxScale, _minRotation, _maxRotation);
     }
 }
 

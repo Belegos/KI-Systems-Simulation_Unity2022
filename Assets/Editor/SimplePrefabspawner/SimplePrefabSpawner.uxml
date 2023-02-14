@@ -13,7 +13,7 @@
             <ui:Toggle text="Random Scale" name="RndScale" />
         </ui:VisualElement>
         <ui:VisualElement name="RandomSettingsVisual">
-            <ui:Foldout text="Random Settings" name="_rndSettingsDropdown" value="true">
+            <ui:Foldout text="Random Settings" name="_rndSettingsDropdown" value="false">
                 <ui:VisualElement>
                     <ui:Toggle text="Random X-Rotation" name="RndXRotation" />
                     <ui:Toggle text="Random Y-Rotation" name="RndYRotation" />
@@ -26,7 +26,7 @@
                         <uie:Vector3Field label="MinRotation" name="MinRotation" />
                     </ui:VisualElement>
                 </ui:Foldout>
-                <ui:Foldout text="Scale settings for Random" name="_scaleSettingsforRandom" value="true">
+                <ui:Foldout text="Scale settings for Random" name="_scaleSettingsDropdown" value="true">
                     <ui:VisualElement>
                         <uie:FloatField label="MinScale" value="0.5" name="MinScale" />
                         <uie:FloatField label="MaxScale" value="10" name="MaxScale" />
@@ -42,6 +42,5 @@
     </ui:VisualElement>
     <ui:VisualElement name="ToolWelcome" style="width: auto; height: auto; min-width: auto; min-height: auto;">
         <ui:Label text="Welcome to the Simple Prefab Spawner tool. This tool should help you to work even faster. Besides various settings for random alignment of prefabs, there is also the possibility to adjust them and their rotation to the normals at the clicked position. First select a layer and a prefab. Next, adjust the settings according to what you want. To activate the placement mode, simply check the Active box. When you left-click in the scene on an object with a collider and the same layer, the selected prefab will be placed. To undo, you can press the keyboard shortcut &quot;CTRL+Z&quot;." display-tooltip-when-elided="true" style="height: 144px; align-items: auto; -unity-text-align: upper-left; white-space: normal; padding-top: 20px; min-height: 144px; min-width: 430px; width: 406px;" />
-        <ui:Button text="Ready" display-tooltip-when-elided="true" name="readyButton" />
     </ui:VisualElement>
 </ui:UXML>
