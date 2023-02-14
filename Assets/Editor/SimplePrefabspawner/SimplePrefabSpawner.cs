@@ -11,13 +11,14 @@ public class SimplePrefabSpawner : EditorWindow
     [SerializeField] private SimPrefSpwn_Data _dataSheet;
     private PlacementLogic _placementLogic;
 
-    private ObjectField _prefabInput;
     private LayerMaskField _layerMask;
+    private ObjectField _prefabInput;
     private GameObject _prefab;
 
     private Toggle _active;
     private Toggle _alignToNormal;
-    
+    private Toggle _randomScale;
+
     private DropdownField _rndSettingsDropdown;
     private Toggle _randomXRotation;
     private Toggle _randomYRotation;
@@ -31,9 +32,7 @@ public class SimplePrefabSpawner : EditorWindow
     private FloatField _minScale;
     private FloatField _maxScale;
 
-    private Toggle _randomScale;
-    private Toggle _randomRotation;
-
+    //private Toggle _randomRotation;
     private DropdownField _loadLayoutDropdown;
 
 
@@ -50,15 +49,20 @@ public class SimplePrefabSpawner : EditorWindow
         InitFields();
         SetValueFromDataSheet();
     }
+
+    /// <summary>
+    /// Links the RootVisuallElement with the attributes.
+    /// Register events for the PrefabField and DataSheetField when a value is changed.
+    /// </summary>
     private void InitFields()
     {
         _rndSettingsDropdown = rootVisualElement.Q<DropdownField>("_rndSettingsDropdown");
         _rndRotationDropdown = rootVisualElement.Q<DropdownField>("_rndRotationDropdown");
         _scaleSettingsforRandom = rootVisualElement.Q<DropdownField>("_scaleSettingsforRandom");
         _loadLayoutDropdown = rootVisualElement.Q<DropdownField>("_loadLayoutDropdown");
-        _randomXRotation = rootVisualElement.Q<Toggle>("_randomXRotation");
-        _randomYRotation = rootVisualElement.Q<Toggle>("_randomYRotation");
-        _randomZRotation = rootVisualElement.Q<Toggle>("_randomZRotation");
+        _randomXRotation = rootVisualElement.Q<Toggle>("RndXRotation");
+        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
+        _randomZRotation = rootVisualElement.Q<Toggle>("RndZRotation");
 
         _layerMask = rootVisualElement.Q<LayerMaskField>("Layer");
         _minRotation = rootVisualElement.Q<Vector3Field>("MinRotation");
@@ -68,15 +72,13 @@ public class SimplePrefabSpawner : EditorWindow
         _active = rootVisualElement.Q<Toggle>("Active");
         _alignToNormal = rootVisualElement.Q<Toggle>("AlignToNormal");
         _randomScale = rootVisualElement.Q<Toggle>("RndScale");
-        _randomRotation = rootVisualElement.Q<Toggle>("RndRotation");
-        _randomYRotation = rootVisualElement.Q<Toggle>("RndYRotation");
 
         _prefabInput = rootVisualElement.Q<ObjectField>("Prefab");
         _prefabInput.RegisterValueChangedCallback(evt => { _prefab = evt.newValue as GameObject; });
-        
+
         var _dataSheetInput = rootVisualElement.Q<ObjectField>("DataField");
-        _dataSheetInput.RegisterValueChangedCallback(evtTwo => 
-        { 
+        _dataSheetInput.RegisterValueChangedCallback(evtTwo =>
+        {
             _dataSheet = evtTwo.newValue as SimPrefSpwn_Data;
             SetValueFromDataSheet();
         });
@@ -96,25 +98,33 @@ public class SimplePrefabSpawner : EditorWindow
             SetValueFromDataSheet();
         }
     }
-
+    /// <summary>
+    /// Sets the values from the data sheet to the fields
+    /// </summary>
     private void SetValueFromDataSheet()
     {
         _layerMask.value = _dataSheet._layerMask.value;
-        _minRotation.value = _dataSheet._minRotation;
-        _maxRotation.value = _dataSheet._maxRotation;
-        _minScale.value = _dataSheet._minScale;
-        _maxScale.value = _dataSheet._maxScale;
+        _prefabInput.value = _dataSheet._prefab;
+
         _active.value = _dataSheet._active;
         _alignToNormal.value = _dataSheet._alignToNormal;
         _randomScale.value = _dataSheet._randomScale;
-        _prefabInput.value = _dataSheet._prefab;
-        //_randomRotation.value = false;
+
+        _randomXRotation.value = _dataSheet._randomXRotation;
+        _randomYRotation.value = _dataSheet._randomYRotation;
+        _randomZRotation.value = _dataSheet._randomZRotation;
+
+        _minRotation.value = _dataSheet._minRotation;
+        _maxRotation.value = _dataSheet._maxRotation;
+
+        _minScale.value = _dataSheet._minScale;
+        _maxScale.value = _dataSheet._maxScale;
     }
 
     private void OnSceneGui(SceneView sceneView)
     {
         //Start();
-        _placementLogic.Main(_layerMask, _prefab, _active, _minRotation, _maxRotation, _alignToNormal, _minScale, _maxScale,_randomScale, _randomRotation);
+        _placementLogic.Main(_layerMask, _prefabInput, _active, _alignToNormal,_randomScale,_randomXRotation, _randomYRotation,_randomZRotation, _minScale, _maxScale, _minRotation, _maxRotation);
     }
 }
 
