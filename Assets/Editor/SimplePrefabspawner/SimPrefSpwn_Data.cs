@@ -23,3 +23,4 @@ public class SimPrefSpwn_Data : ScriptableObject
     public float _maxScale;
     
 }
+

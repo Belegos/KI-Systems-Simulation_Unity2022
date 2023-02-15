@@ -9,49 +9,184 @@ public class PlacementLogic
         Toggle _randomScale, Toggle _randomXRotation, Toggle _randomYRotation, Toggle _randomZRotation,
         FloatField _minScale, FloatField _maxScale, Vector3Field _minRotation, Vector3Field _maxRotation)
     {
-        var layerMask = _layerMask.value;
-        var _prefab = _prefabInput.value as GameObject;
-        var active = _active.value;
-        var minRotation = _minRotation.value;
-        var maxRotation = _maxRotation.value;
-        var _offset = new Vector3(0.01f, 0.01f, 0.01f); //offset to prevent spawning inside colliders
+        LayerMask layerMask = _layerMask.value;
+        GameObject _prefab = _prefabInput.value as GameObject;
+        bool active = _active.value;
+        Vector3 minRotation = _minRotation.value;
+        Vector3 maxRotation = _maxRotation.value;
+        float offset = 0.01f;
+        Vector3 _offsetX = new Vector3(offset, 0, 0);//offset to prevent spawning inside colliders
+        Vector3 _offsetY = new Vector3(0f, offset, 0f);
+        Vector3 _offsetZ = new Vector3(0, 0, offset);
+        Vector3 _offsetXMinus = new Vector3(-offset, 0, 0);
+        Vector3 _offsetYMinus = new Vector3(0f, -offset, 0f);
+        Vector3 _offsetZMinus = new Vector3(0, 0, -offset);
+        var evt = Event.current;
+
+        int _iterationCound = 0;
 
         if (!active) return;
-        var evt = Event.current;
         if (evt.IsLeftMouseButtonDown())
         {
+            //int iterationCount = 0;
             var ray = HandleUtility.GUIPointToWorldRay(evt.mousePosition);
             Physics.Raycast(ray, out var raycastHit, Mathf.Infinity, layerMask);
             if (raycastHit.collider == null) return;
             if (raycastHit.collider)
             {
-                var obj = CreatePrefab(raycastHit.point, _prefab, layerMask, _offset, _randomScale, _minScale, _maxScale);
-                if (obj == null) return;
-                if (_randomXRotation.value) //TODO: Fix this
+                // Instantiate the prefab at the raycast hit point
+                var newObject = PrefabUtility.InstantiatePrefab(_prefab) as GameObject;
+                if (_randomScale.value)
                 {
-                    //Random X-Rotation
-                    ApplyRandomXRotation();
+                    ApplyRandomScale(newObject, _minScale, _maxScale);
                 }
-                if (_randomYRotation.value) //TODO: Fix this
+                if (_alignToNormal.value)
                 {
-                    //Random Y-Rotation
-                    ApplyRandomYRotation();
+                    var normal = raycastHit.normal;
+                    var rotation = Quaternion.FromToRotation(Vector3.up, normal);
+                    newObject.transform.rotation = rotation;
                 }
-                if (_randomZRotation.value) //TODO: Fix this
+                newObject.transform.position = raycastHit.point;
+                if (_randomXRotation.value || _randomYRotation.value || _randomZRotation.value)
                 {
-                    //Random Z-Rotation
-                    ApplyRandomZRotation();
+                    Vector3 rotation = new Vector3(
+                        _randomXRotation.value ? Random.Range(minRotation.x, maxRotation.x) : newObject.transform.eulerAngles.x,
+                        _randomYRotation.value ? Random.Range(minRotation.y, maxRotation.y) : newObject.transform.eulerAngles.y,
+                        _randomZRotation.value ? Random.Range(minRotation.z, maxRotation.z) : newObject.transform.eulerAngles.z
+                    );
+                    newObject.transform.eulerAngles = rotation;
                 }
-                if (_alignToNormal.value) //TODO: Fix this
+
+                // Check for collisions with other objects in the layer
+                var bounds = newObject.GetComponent<Renderer>().bounds;
+
+                var hits = Physics.OverlapBox(bounds.center, bounds.extents, newObject.transform.rotation, layerMask);
+
+                // Move the object in every direction until all colliders are clear
+                //while (_iterationCound <= 10000)
+                //{
+                var validPlace = false;
+                if (hits.Length > 0)
                 {
-                    obj.transform.rotation = Quaternion.FromToRotation(Vector3.up, raycastHit.normal);
+                    #region iterationalObjects
+                    GameObject objectXPlus = newObject;
+                    Bounds boundsXPlus = bounds;
+
+                    GameObject objectYPlus = newObject;
+                    Bounds boundsYPlus = bounds;
+
+                    GameObject objectZPlus = newObject;
+                    Bounds boundsZPlus = bounds;
+
+                    GameObject objectXMinus = newObject;
+                    Bounds boundsXMinus = bounds;
+
+                    GameObject objectYMinus = newObject;
+                    Bounds boundsYMinus = bounds;
+
+                    GameObject objectZMinus = newObject;
+                    Bounds boundsZMinus = bounds;
+                    #endregion
+                    while (validPlace is false)
+                    {
+
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetX, ref _iterationCound, objectXPlus, boundsXPlus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectXPlus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetY, ref _iterationCound, objectYPlus, boundsYPlus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectYPlus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetZ, ref _iterationCound, objectZPlus, boundsZPlus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectZPlus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetXMinus, ref _iterationCound, objectXMinus, boundsXMinus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectXMinus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetYMinus, ref _iterationCound, objectYMinus, boundsYMinus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectYMinus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (validPlace is false)
+                        {
+                            hits = SearchForNoColliderHits(layerMask, _offsetZMinus, ref _iterationCound, objectZMinus, boundsZMinus);
+                            if (hits.Length <= 0)
+                            {
+                                newObject.transform.position = objectZMinus.transform.position;
+                                validPlace = true;
+                                break;
+                            }
+                        }
+                        if (hits.Length <= 0) { validPlace = true; break; }
+                        if (_iterationCound >= 10000 && hits.Length > 0)
+                        {
+                            Debug.LogError("Can't find a valid position, please try somewhere else. " + _iterationCound + " times iterated until fail.");
+                            validPlace = true;
+                            break;
+                        }
+                        _iterationCound++;
+                    }
                 }
-                Undo.RegisterCreatedObjectUndo(obj, "Prefab spawned");
+                Undo.RegisterCreatedObjectUndo(newObject, "Prefab spawned");//register for undo with ctrl+z
             }
         }
     }
 
-    private GameObject CreatePrefab(Vector3 pos, GameObject _prefab, LayerMask _layerMask, Vector3 _offset, Toggle _randomScale, FloatField _minScale, FloatField _maxScale)
+    private static Collider[] SearchForNoColliderHits(int layerMask, Vector3 _offset, ref int _iterationCound, GameObject newObject, Bounds bounds)
+    {
+        Collider[] hits;
+        Vector3 localOffset = _offset;
+        for (int i = 0; i < _iterationCound; i++)
+        {
+            localOffset = localOffset + _offset;
+        }
+        newObject.transform.position = newObject.transform.position + localOffset;
+        bounds.center = bounds.center + localOffset;
+        hits = Physics.OverlapBox(bounds.center, bounds.extents, newObject.transform.rotation, layerMask);
+        return hits;
+    }
+
+    private void ApplyRandomScale(GameObject obj, FloatField _minScale, FloatField _maxScale)
+    {
+        var minScale = _minScale.value;
+        var maxScale = _maxScale.value;
+        obj.transform.localScale = Vector3.one * UnityEngine.Random.Range(minScale, maxScale);
+    }
+
+    private GameObject OldCreate(Vector3 pos, GameObject _prefab, LayerMask _layerMask, Vector3 _offset, Toggle _randomScale, FloatField _minScale, FloatField _maxScale)
     {
         var obj = PrefabUtility.InstantiatePrefab(_prefab) as GameObject; //short for intanciate
         if (_randomScale.value)//Handle Scale-Settings
@@ -60,37 +195,25 @@ public class PlacementLogic
         }
         var collider = obj.GetComponent<Collider>();
         var bounds = obj.GetComponent<Collider>().bounds;
-        var colliders = Physics.OverlapBox(bounds.center, bounds.extents, obj.transform.rotation, _layerMask);
-        obj.transform.position = pos + new Vector3(0, bounds.size.y / 2 + _offset.y, 0);
 
-        //TODO: Fix this
-        //if (colliders.Length > 0)
-        //{
-        //    GameObject.DestroyImmediate(obj);
-        //    Debug.LogWarning("Warning: Object collided with other SceneObject and was not spawned. Please try again.");
-        //    return null;
-        //} 
+        if (collider == null)
+        {
+            Debug.LogError("The object must have a Collider component to use this method.");
+        }
+        obj.transform.position = new Vector3(pos.x, pos.y, pos.z);
+        //obj.transform.pos = pos + new Vector3(0, bounds.size.y / 2 + _offsetY.y, 0);
+
+        RaycastHit hit;
+        while (Physics.SphereCast(obj.transform.position + bounds.center, collider.bounds.extents.y, Vector3.up, out hit, Mathf.Infinity, _layerMask, QueryTriggerInteraction.Ignore))
+        {
+            float distanceToMove = hit.distance - collider.bounds.extents.y;
+            obj.transform.position += new Vector3(0f, distanceToMove, 0f);
+            Debug.Log("Obj moved: " + distanceToMove.ToString());
+        }
+
+        //var colliders = Physics.OverlapBox(bounds.center, bounds.extents, obj.transform.rotation, _layerMask);
 
         return obj;
-    }
-    private void ApplyRandomScale(GameObject obj, FloatField _minScale, FloatField _maxScale)
-    {
-        var minScale = _minScale.value;
-        var maxScale = _maxScale.value;
-        obj.transform.localScale = Vector3.one * UnityEngine.Random.Range(minScale, maxScale);
-    }
-
-    private void ApplyRandomXRotation()
-    {
-
-    }
-    private void ApplyRandomYRotation()
-    {
-
-    }
-    private void ApplyRandomZRotation()
-    {
-
     }
 
 
