@@ -10,11 +10,13 @@ public class PlacementLogic
         FloatField _minScale, FloatField _maxScale, Vector3Field _minRotation, Vector3Field _maxRotation)
     {
         LayerMask layerMask = _layerMask.value;
-        GameObject _prefab = _prefabInput.value as GameObject;
+        GameObject prefab = _prefabInput.value as GameObject;
         bool active = _active.value;
+        bool validPlace = false;
         Vector3 minRotation = _minRotation.value;
         Vector3 maxRotation = _maxRotation.value;
         float offset = 0.01f;
+        int iterationCount = 0;
         Vector3 _offsetX = new Vector3(offset, 0, 0);//offset to prevent spawning inside colliders
         Vector3 _offsetY = new Vector3(0f, offset, 0f);
         Vector3 _offsetZ = new Vector3(0, 0, offset);
@@ -22,8 +24,8 @@ public class PlacementLogic
         Vector3 _offsetYMinus = new Vector3(0f, -offset, 0f);
         Vector3 _offsetZMinus = new Vector3(0, 0, -offset);
         var evt = Event.current;
+        Collider[] hits;
 
-        int _iterationCound = 0;
 
         if (!active) return;
         if (evt.IsLeftMouseButtonDown())
@@ -34,8 +36,8 @@ public class PlacementLogic
             if (raycastHit.collider == null) return;
             if (raycastHit.collider)
             {
-                // Instantiate the prefab at the raycast hit point
-                var newObject = PrefabUtility.InstantiatePrefab(_prefab) as GameObject;
+                iterationCount = 0;//reset count for error prevention
+                var newObject = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
                 if (_randomScale.value)
                 {
                     ApplyRandomScale(newObject, _minScale, _maxScale);
@@ -46,7 +48,6 @@ public class PlacementLogic
                     var rotation = Quaternion.FromToRotation(Vector3.up, normal);
                     newObject.transform.rotation = rotation;
                 }
-                newObject.transform.position = raycastHit.point;
                 if (_randomXRotation.value || _randomYRotation.value || _randomZRotation.value)
                 {
                     Vector3 rotation = new Vector3(
@@ -56,16 +57,14 @@ public class PlacementLogic
                     );
                     newObject.transform.eulerAngles = rotation;
                 }
+                newObject.transform.position = raycastHit.point;
 
                 // Check for collisions with other objects in the layer
-                var bounds = newObject.GetComponent<Renderer>().bounds;
+                Bounds bounds = newObject.GetComponent<Renderer>().bounds;
 
-                var hits = Physics.OverlapBox(bounds.center, bounds.extents, newObject.transform.rotation, layerMask);
+                hits = Physics.OverlapBox(bounds.center, bounds.extents, newObject.transform.rotation, layerMask);
 
                 // Move the object in every direction until all colliders are clear
-                //while (_iterationCound <= 10000)
-                //{
-                var validPlace = false;
                 if (hits.Length > 0)
                 {
                     #region iterationalObjects
@@ -89,10 +88,9 @@ public class PlacementLogic
                     #endregion
                     while (validPlace is false)
                     {
-
-                        if (validPlace is false)
+                        if (validPlace is false)//check in X+ direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetX, ref _iterationCound, objectXPlus, boundsXPlus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetX, ref iterationCount, objectXPlus, boundsXPlus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectXPlus.transform.position;
@@ -100,9 +98,9 @@ public class PlacementLogic
                                 break;
                             }
                         }
-                        if (validPlace is false)
+                        if (validPlace is false)//check in Y+ direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetY, ref _iterationCound, objectYPlus, boundsYPlus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetY, ref iterationCount, objectYPlus, boundsYPlus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectYPlus.transform.position;
@@ -110,9 +108,9 @@ public class PlacementLogic
                                 break;
                             }
                         }
-                        if (validPlace is false)
+                        if (validPlace is false)//check in Z+ direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetZ, ref _iterationCound, objectZPlus, boundsZPlus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetZ, ref iterationCount, objectZPlus, boundsZPlus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectZPlus.transform.position;
@@ -120,9 +118,9 @@ public class PlacementLogic
                                 break;
                             }
                         }
-                        if (validPlace is false)
+                        if (validPlace is false)//check in X- direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetXMinus, ref _iterationCound, objectXMinus, boundsXMinus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetXMinus, ref iterationCount, objectXMinus, boundsXMinus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectXMinus.transform.position;
@@ -130,9 +128,9 @@ public class PlacementLogic
                                 break;
                             }
                         }
-                        if (validPlace is false)
+                        if (validPlace is false)//check in Y- direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetYMinus, ref _iterationCound, objectYMinus, boundsYMinus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetYMinus, ref iterationCount, objectYMinus, boundsYMinus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectYMinus.transform.position;
@@ -140,9 +138,9 @@ public class PlacementLogic
                                 break;
                             }
                         }
-                        if (validPlace is false)
+                        if (validPlace is false)//check in Z- direction
                         {
-                            hits = SearchForNoColliderHits(layerMask, _offsetZMinus, ref _iterationCound, objectZMinus, boundsZMinus);
+                            hits = SearchForNoColliderHits(layerMask, _offsetZMinus, ref iterationCount, objectZMinus, boundsZMinus);
                             if (hits.Length <= 0)
                             {
                                 newObject.transform.position = objectZMinus.transform.position;
@@ -151,13 +149,13 @@ public class PlacementLogic
                             }
                         }
                         if (hits.Length <= 0) { validPlace = true; break; }
-                        if (_iterationCound >= 10000 && hits.Length > 0)
+                        if (iterationCount >= 10000 && hits.Length > 0)
                         {
-                            Debug.LogError("Can't find a valid position, please try somewhere else. " + _iterationCound + " times iterated until fail.");
+                            Debug.LogError("Can't find a valid position, please try somewhere else. " + iterationCount + " times iterated until fail.");
                             validPlace = true;
                             break;
                         }
-                        _iterationCound++;
+                        iterationCount++;
                     }
                 }
                 Undo.RegisterCreatedObjectUndo(newObject, "Prefab spawned");//register for undo with ctrl+z
@@ -201,7 +199,6 @@ public class PlacementLogic
             Debug.LogError("The object must have a Collider component to use this method.");
         }
         obj.transform.position = new Vector3(pos.x, pos.y, pos.z);
-        //obj.transform.pos = pos + new Vector3(0, bounds.size.y / 2 + _offsetY.y, 0);
 
         RaycastHit hit;
         while (Physics.SphereCast(obj.transform.position + bounds.center, collider.bounds.extents.y, Vector3.up, out hit, Mathf.Infinity, _layerMask, QueryTriggerInteraction.Ignore))
