@@ -19,9 +19,9 @@ MonoBehaviour:
   _active: 1
   _alignToNormal: 1
   _randomScale: 1
-  _randomXRotation: 1
-  _randomYRotation: 1
-  _randomZRotation: 1
+  _randomXRotation: 0
+  _randomYRotation: 0
+  _randomZRotation: 0
   _minRotation: {x: 0, y: 0, z: 0}
   _maxRotation: {x: 250, y: 250, z: 250}
   _minScale: 1
