@@ -4,7 +4,28 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 public class PlacementLogic
-{
+{/// <summary>
+ /// This method instantiates a new prefab GameObject at the position of a mouse click in the scene view of Unity editor. 
+ /// The method also includes several options for randomizing the scale and rotation of the instantiated object, 
+ /// as well as aligning it to the surface normal at the spawn location.
+ ///
+ /// If the newly spawned object intersects with other colliders in the scene, the method searches in all directions to find a valid position 
+ /// with no intersections.If the search fails after a specified number of iterations, the method will return an error message.
+ ///
+ /// Lastly, the method registers the spawned object for undo functionality with the Ctrl+Z keyboard shortcut.
+ /// </summary>
+ /// <param name="_layerMask"></param>
+ /// <param name="_prefabInput"></param>
+ /// <param name="_active"></param>
+ /// <param name="_alignToNormal"></param>
+ /// <param name="_randomScale"></param>
+ /// <param name="_randomXRotation"></param>
+ /// <param name="_randomYRotation"></param>
+ /// <param name="_randomZRotation"></param>
+ /// <param name="_minScale"></param>
+ /// <param name="_maxScale"></param>
+ /// <param name="_minRotation"></param>
+ /// <param name="_maxRotation"></param>
     public void Main(LayerMaskField _layerMask, ObjectField _prefabInput, Toggle _active, Toggle _alignToNormal,
         Toggle _randomScale, Toggle _randomXRotation, Toggle _randomYRotation, Toggle _randomZRotation,
         FloatField _minScale, FloatField _maxScale, Vector3Field _minRotation, Vector3Field _maxRotation)
@@ -30,7 +51,6 @@ public class PlacementLogic
         if (!active) return;
         if (evt.IsLeftMouseButtonDown())
         {
-            //int iterationCount = 0;
             var ray = HandleUtility.GUIPointToWorldRay(evt.mousePosition);
             Physics.Raycast(ray, out var raycastHit, Mathf.Infinity, layerMask);
             if (raycastHit.collider == null) return;
@@ -68,6 +88,7 @@ public class PlacementLogic
                 if (hits.Length > 0)
                 {
                     #region iterationalObjects
+                    //These objects are localy used to find the shortest side, on wich the object will be moved
                     GameObject objectXPlus = newObject;
                     Bounds boundsXPlus = bounds;
 
@@ -183,36 +204,5 @@ public class PlacementLogic
         var maxScale = _maxScale.value;
         obj.transform.localScale = Vector3.one * UnityEngine.Random.Range(minScale, maxScale);
     }
-
-    private GameObject OldCreate(Vector3 pos, GameObject _prefab, LayerMask _layerMask, Vector3 _offset, Toggle _randomScale, FloatField _minScale, FloatField _maxScale)
-    {
-        var obj = PrefabUtility.InstantiatePrefab(_prefab) as GameObject; //short for intanciate
-        if (_randomScale.value)//Handle Scale-Settings
-        {
-            ApplyRandomScale(obj, _minScale, _maxScale);
-        }
-        var collider = obj.GetComponent<Collider>();
-        var bounds = obj.GetComponent<Collider>().bounds;
-
-        if (collider == null)
-        {
-            Debug.LogError("The object must have a Collider component to use this method.");
-        }
-        obj.transform.position = new Vector3(pos.x, pos.y, pos.z);
-
-        RaycastHit hit;
-        while (Physics.SphereCast(obj.transform.position + bounds.center, collider.bounds.extents.y, Vector3.up, out hit, Mathf.Infinity, _layerMask, QueryTriggerInteraction.Ignore))
-        {
-            float distanceToMove = hit.distance - collider.bounds.extents.y;
-            obj.transform.position += new Vector3(0f, distanceToMove, 0f);
-            Debug.Log("Obj moved: " + distanceToMove.ToString());
-        }
-
-        //var colliders = Physics.OverlapBox(bounds.center, bounds.extents, obj.transform.rotation, _layerMask);
-
-        return obj;
-    }
-
-
 }
 

@@ -2826,6 +2826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DungeonButton
       objectReference: {fileID: 0}
+    - target: {fileID: 1718321170414068469, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1718321170414068471, guid: 0900d017e1f060943a7187d13d445eeb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
