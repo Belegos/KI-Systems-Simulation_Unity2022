@@ -233,7 +233,7 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    public struct MapData //stores the Data for the Map (heightMap and colorMap) for usage in other methods
+    public struct MapData //stores the Data for the Map (heightMap and colorMap) for usage in _other methods
     {
         public readonly float[,] HeightMap;
         public readonly Color[] ColorMap;

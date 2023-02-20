@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0585f5f5658ea5849b15564499dc7b7d, type: 3}
+  m_Name: Layout_2
+  m_EditorClassIdentifier: 
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _prefab: {fileID: 5557855674738688801, guid: f0798ee39083bb547b36e19b0ce6b5e3, type: 3}
+  _active: 0
+  _alignToNormal: 1
+  _randomScale: 1
+  _randomXRotation: 1
+  _randomYRotation: 1
+  _randomZRotation: 1
+  _minRotation: {x: 0, y: 0, z: 0}
+  _maxRotation: {x: 50, y: 50, z: 0}
+  _minScale: 2
+  _maxScale: 4

@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0649: Dem Feld "PlayerLocomotion._normalVector" wird nie etwas zugewiesen, und es hat immer seinen Standardwert von "".
+dotnet_diagnostic.CS0649.severity = none

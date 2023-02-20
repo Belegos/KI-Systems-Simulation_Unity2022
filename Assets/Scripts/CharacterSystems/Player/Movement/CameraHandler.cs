@@ -40,6 +40,15 @@ namespace KI_Project
             _defaultPosition = cameraTransform.localPosition.z;
             _ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10); // Camera ignore specific layers
         }
+        private void OnEnable()
+        {
+
+            _myTransform = transform;
+            _targetTransformTarget = GameObject.FindGameObjectWithTag("Player");
+            targetTransform = _targetTransformTarget.transform;
+            _defaultPosition = cameraTransform.localPosition.z;
+
+        }
 
         public void FollowTarget(float delta) // Follow prefab, camera rotation around prefab
         {

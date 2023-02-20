@@ -10,15 +10,15 @@ namespace StateManager
         public override State ExecuteCurrentState(StateManager manager)
         {
 
-            if (manager.IsInChaseRange && manager.IsInAttackRange)//when player is in chase range and in attack range, switch to attack state
+            if (manager.IsInChaseRange && manager.IsInAttackRange)//when _player is in chase range and in attack range, switch to attack state
             {
                 return manager.AttackState;
             }
-            if (!manager.IsInChaseRange) //when player is not in sightrange, return to idle
+            if (!manager.IsInChaseRange) //when _player is not in sightrange, return to idle
             {
                 return manager.IdleState;
             }
-            if (!manager.IsInAttackRange && !manager.IsInChaseRange) //when player is not in sight and in attack range, return to idle
+            if (!manager.IsInAttackRange && !manager.IsInChaseRange) //when _player is not in sight and in attack range, return to idle
             {
                 return manager.IdleState;
             }
