@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 5575.329, g: 5622.195, b: 5707.1514, a: 1}
+  m_IndirectSpecularColor: {r: 2368.125, g: 2766.7188, b: 3489.7656, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -685,7 +685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.27450982, g: 0.2509804, b: 0.2509804, a: 1}
+  m_Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3196,6 +3196,7 @@ GameObject:
   - component: {fileID: 1645933510}
   - component: {fileID: 1645933509}
   - component: {fileID: 1645933513}
+  - component: {fileID: 1645933514}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -3305,6 +3306,18 @@ MonoBehaviour:
   pauseMenu: PauseScene
   optionSceneImg: {fileID: 317885468}
   levelSelectoionSceneImg: {fileID: 1279671902}
+--- !u!114 &1645933514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645933507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65e73768780113d4b959128b41c6efbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1656074601
 GameObject:
   m_ObjectHideFlags: 0
