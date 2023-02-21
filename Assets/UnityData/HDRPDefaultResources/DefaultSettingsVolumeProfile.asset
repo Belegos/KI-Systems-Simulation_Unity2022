@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88178bb13f64a54f90d6cd6ef7aa9a1, type: 3}
   m_Name: CloudLayer
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   opacity:
     m_OverrideState: 1
     m_Value: 1
@@ -602,7 +602,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   meteringMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 2
   luminanceSource:
     m_OverrideState: 0
@@ -614,10 +614,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1.2
   limitMin:
-    m_OverrideState: 0
-    m_Value: 1.0861843
+    m_OverrideState: 1
+    m_Value: -5
   limitMax:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 15
   curveMap:
     m_OverrideState: 0
