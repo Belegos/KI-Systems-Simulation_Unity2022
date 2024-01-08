@@ -1,4 +1,4 @@
-#Englisch:
+Englisch:
 
 As part of my studies at SAE Cologne, I worked on AI systems and simulations in my second semester. In this project, I created a scene in which a finite state machine is used to have an AI attack and track the player.
 
